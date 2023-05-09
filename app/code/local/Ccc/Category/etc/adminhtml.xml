@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <category translate="title" module="category">
+            <title>Category</title>
+            <sort_order>110</sort_order>
+            <children>
+                <manage translate="title" module="category">
+                    <title>Manage Categorys</title>
+                    <action>category/adminhtml_category/index</action>
+                    <sort_order>10</sort_order>
+                </manage>
+            </children>
+        </category>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <category translate="title" module="category">
+                        <title>Categorys</title>
+                        <sort_order>40</sort_order>
+                        <children>
+                            <manage translate="title" module="category">
+                                <title>Manage categorys</title>
+                                <action>category/adminhtml_category/index</action>
+                                <sort_order>10</sort_order>
+                            </manage>
+                        </children>
+                    </category>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <category translate="title" module="category">
+                                        <title>Categorys Section</title>
+                                        <sort_order>50</sort_order>
+                                    </category>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>
