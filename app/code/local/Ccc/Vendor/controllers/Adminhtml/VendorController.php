@@ -61,7 +61,7 @@ class Ccc_Vendor_Adminhtml_VendorController extends Mage_Adminhtml_Controller_Ac
                 $addressModel = Mage::getModel('vendor/vendor_address')->load($id, 'vendor_id');
             }
 
-            $addressModel->setData(array_merge($addressModel->getData(), $addressData))->addData(['vendor_id'=>$id])->save();
+            $addressModel->setData(array_merge($addressModel->getData(), $addressData))->addData(['vendor_id'=>$vendorModel->getId()])->save();
             $vendorModel->addData(['address_id' => $addressModel->address_id])->save();
 
             Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('vendor')->__('Vendor was successfully saved'));
