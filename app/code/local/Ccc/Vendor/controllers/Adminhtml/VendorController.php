@@ -17,6 +17,7 @@ class Ccc_Vendor_Adminhtml_VendorController extends Mage_Adminhtml_Controller_Ac
     public function editAction() {
         $id = $this->getRequest()->getParam('vendor_id');
         $model = Mage::getModel('vendor/vendor')->load($id);
+        $addressModel = Mage::getModel('vendor/vendor_address')->load($id, 'vendor_id');
         if ($model->getId() || $id == 0) {
             $data = Mage::getSingleton('adminhtml/session')->getFormData(true);
             if (!empty($data)) {
@@ -24,6 +25,7 @@ class Ccc_Vendor_Adminhtml_VendorController extends Mage_Adminhtml_Controller_Ac
             }
 
             Mage::register('vendor_data', $model);
+            Mage::register('address_data', $addressModel);
             $this->loadLayout();
             $this->_setActiveMenu('vendor/items');
             $this->_addBreadcrumb(Mage::helper('adminhtml')->__('Item Manager'), Mage::helper('adminhtml')->__('Item Manager'));
