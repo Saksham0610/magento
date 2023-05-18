@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <saksham translate="title" module="saksham">
+            <title>Saksham</title>
+            <sort_order>140</sort_order>
+            <children>
+                <manage translate="title" module="saksham">
+                    <title>Saksham</title>
+                    <action>saksham/adminhtml_saksham/index</action>
+                    <sort_order>10</sort_order>
+                </manage>
+            </children>
+        </saksham>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <saksham translate="title" module="saksham">
+                        <title>Saksham</title>
+                        <sort_order>40</sort_order>
+                        <children>
+                            <manage translate="title" module="saksham">
+                                <title>Saksham</title>
+                                <action>saksham/adminhtml_saksham/index</action>
+                                <sort_order>10</sort_order>
+                            </manage>
+                        </children>
+                    </saksham>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <saksham translate="title" module="saksham">
+                                        <title>Saksham :)</title>
+                                        <sort_order>50</sort_order>
+                                    </saksham>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>
