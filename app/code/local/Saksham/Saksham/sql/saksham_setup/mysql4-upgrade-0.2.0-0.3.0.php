@@ -33,4 +33,14 @@ $installer->addAttribute(9, 'status', array(
     'global'        => 0
 ));
 
+$installer->addAttribute(9, 'dob', array(
+    'type'          => 'datetime',
+    'input'         => 'date',
+    'label'         => 'DOB',
+    'required'      => 0,
+    'group'         => '',
+    'sort_order'    => '',
+    'global'        => 0
+));
+
 $installer->endSetup();
