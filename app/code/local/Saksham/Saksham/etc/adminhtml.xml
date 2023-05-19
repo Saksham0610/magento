@@ -6,10 +6,26 @@
             <sort_order>140</sort_order>
             <children>
                 <manage translate="title" module="saksham">
-                    <title>Saksham</title>
+                    <title>Manage</title>
                     <action>saksham/adminhtml_saksham/index</action>
                     <sort_order>10</sort_order>
                 </manage>
+                <manageattribute>
+                    <title>Attribute</title>
+                    <children>
+                        <attribute>
+                            <title>Manage Attributes</title>
+                            <action>saksham/adminhtml_saksham_attribute/index</action>
+                            <sort_order>10</sort_order>
+                        </attribute>
+                        <attribute_set>
+                            <title>Manage Attribute Sets</title>
+                            <action>saksham/adminhtml_saksham_attribute/set</action>
+                            <sort_order>10</sort_order>
+                        </attribute_set>
+                    </children>
+                    <sort_order>20</sort_order>
+                </manageattribute>
             </children>
         </saksham>
     </menu>

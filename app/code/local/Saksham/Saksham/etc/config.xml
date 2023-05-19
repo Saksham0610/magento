@@ -38,27 +38,9 @@
                     <saksham>
                         <table>saksham</table>
                     </saksham>
-                    <saksham_entity>
-                        <table>saksham_saksham_entity</table>
-                    </saksham_entity>
-                    <saksham_entity_datetime>
-                        <table>saksham_saksham_entity_datetime</table>
-                    </saksham_entity_datetime>
-                    <saksham_entity_decimal>
-                        <table>saksham_saksham_entity_decimal</table>
-                    </saksham_entity_decimal>
-                    <saksham_entity_int>
-                        <table>saksham_saksham_entity_int</table>
-                    </saksham_entity_int>
-                    <saksham_entity_text>
-                        <table>saksham_saksham_entity_text</table>
-                    </saksham_entity_text>
-                    <saksham_entity_varchar>
-                        <table>saksham_saksham_entity_varchar</table>
-                    </saksham_entity_varchar>
-                    <saksham_entity_char>
-                        <table>saksham_saksham_entity_char</table>
-                    </saksham_entity_char>
+                    <saksham_attribute>
+                        <table>eav_attribute</table>
+                    </saksham_attribute>
                 </entities>
             </saksham_resource>
         </models>
