@@ -74,6 +74,9 @@
         <helpers>
             <salesman>
                 <class>Ccc_Salesman_Helper</class>
+                <rewrite>
+                    <data>Ccc_Salesman_Helper_NewData</data>
+                </rewrite>
             </salesman>
         </helpers>
     </global>
