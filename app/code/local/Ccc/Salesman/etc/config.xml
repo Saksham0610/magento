@@ -61,7 +61,15 @@
         <blocks>
             <salesman>
                 <class>Ccc_Salesman_Block</class>
+                <rewrite>
+                    <adminhtml_salesman_grid>Ccc_Product_Block_Adminhtml_Product_Grid</adminhtml_salesman_grid>
+                </rewrite>
             </salesman>
+            <adminhtml>
+                <rewrite>
+                    <catalog_product_grid>Ccc_Salesman_Block_Adminhtml_Salesman_Grid</catalog_product_grid>
+                </rewrite>
+            </adminhtml>
         </blocks>
         <helpers>
             <salesman>
