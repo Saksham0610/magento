@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <vendor translate="title" module="vendor">
+            <title>Vendor</title>
+            <sort_order>90</sort_order>
+            <children>
+                <manage translate="title" module="vendor">
+                    <title>Manage Vendors</title>
+                    <action>vendor/adminhtml_vendor/index</action>
+                    <sort_order>10</sort_order>
+                </manage>
+            </children>
+        </vendor>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <vendor translate="title" module="vendor">
+                        <title>Vendors</title>
+                        <sort_order>40</sort_order>
+                        <children>
+                            <managevender translate="title" module="vendor">
+                                <title>Manage Vendor</title>
+                                <action>vendor/adminhtml_vendor/index</action>
+                                <sort_order>10</sort_order>
+                            </managevender>
+                        </children>
+                    </vendor>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <vendor translate="title" module="vendor">
+                                        <title>Vendors Section</title>
+                                        <sort_order>50</sort_order>
+                                    </vendor>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>
