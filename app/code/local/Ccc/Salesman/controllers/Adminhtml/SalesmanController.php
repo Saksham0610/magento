@@ -50,6 +50,11 @@ class Ccc_Salesman_Adminhtml_SalesmanController extends Mage_Adminhtml_Controlle
             $salesmanModel->setData($salesmanData)
                 ->setId($this->getRequest()->getParam('id'));
 
+
+            Mage::dispatchEvent('salesman_save', array('model' => $salesmanModel, 'request' => $this->getRequest()));
+
+
+
             if ($salesmanModel->salesman_id == NULL) {
                 $salesmanModel->created_at = date("y-m-d H:i:s");
             } else {
