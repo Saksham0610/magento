@@ -85,8 +85,10 @@
             <salesman>
                 <use>admin</use>
                 <args>
-                    <module>Ccc_Salesman</module>
                     <frontName>salesman</frontName>
+                    <modules>
+                        <ccc_salesman before="Ccc_Product">Ccc_Salesman</ccc_salesman>
+                    </modules>
                 </args>
             </salesman>
         </routers>
