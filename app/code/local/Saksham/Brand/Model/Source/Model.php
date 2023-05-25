@@ -3,19 +3,11 @@ class Saksham_Brand_Model_Source_Model extends Mage_Eav_Model_Entity_Attribute_S
 {
     public function getAllOptions()
     {
-        if (!$this->_options) {
-            $this->_options = array(
-                array(
-                    'value' => 'option1',
-                    'label' => 'Option 1',
-                ),
-                array(
-                    'value' => 'option2',
-                    'label' => 'Option 2',
-                ),
-                // add more options as needed
-            );
+        $brand = Mage::getModel('brand/brand')->getCollection()->getItems();
+        $arr = array();
+        foreach ($brand as $k=>$v) {
+            $arr[] = array('value'=>$k, 'label'=>$v->name);
         }
-        return $this->_options;
+        return $arr;
     }
 }

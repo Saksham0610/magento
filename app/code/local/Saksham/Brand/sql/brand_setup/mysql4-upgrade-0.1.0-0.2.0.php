@@ -6,8 +6,11 @@ $installer->addAttribute(4, 'brand', array(
     'input'         => 'select',
     'label'         => 'Brand',
     'required'      => 0,
-    'group'         => '',
+    'group'         => 'General',
+    'source'        => 'saksham_brand_model_source_model',
     'sort_order'    => '',
-    'global'        => 0
+    'global'        => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_STORE,
+    'visible'       => true,
+    'user_defined'  => true,
 ));
 $installer->endSetup();
