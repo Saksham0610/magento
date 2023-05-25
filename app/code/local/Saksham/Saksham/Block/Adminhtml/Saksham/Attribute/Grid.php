@@ -1,31 +1,17 @@
-<?php
+<?php 
 class Saksham_Saksham_Block_Adminhtml_Saksham_Attribute_Grid extends Mage_Eav_Block_Adminhtml_Attribute_Grid_Abstract
-{
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setId('sakshamAdminhtmlSakshamAttributeGrid');
-        $this->setDefaultSort('attribute_id');
-        $this->setDefaultDir('ASC');
-    }
-
-    protected function _getCollection()
-    {
-        return 'saksham/saksham_attribute_collection';
-    }
-
-   protected function _prepareCollection()
-    {
-        $collection = Mage::getModel('saksham/saksham_attribute')->getCollection();
-        $collection->getSelect()->columns(array('*'))->where('entity_type_id = 9');
+{	
+	protected function _prepareCollection()
+	{
+		$collection = Mage::getResourceModel('saksham/saksham_attribute_collection');
         $this->setCollection($collection);
         return parent::_prepareCollection();
-    }
+	}
 
-    protected function _prepareColumns()
+	protected function _prepareColumns()
     {
         parent::_prepareColumns();
-        
+
         $this->addColumnAfter('is_visible', array(
             'header'=>Mage::helper('catalog')->__('Visible'),
             'sortable'=>true,
@@ -88,25 +74,6 @@ class Saksham_Saksham_Block_Adminhtml_Saksham_Attribute_Grid extends Mage_Eav_Bl
             'align' => 'center',
         ), 'is_filterable');
 
-        return parent::_prepareColumns();
-    }
-
-    protected function _prepareMassaction()
-    {
-        $this->setMassactionIdField('entity_id');
-        $this->getMassactionBlock()->setFormFieldName('entity_id');
-         
-        $this->getMassactionBlock()->addItem('delete', array(
-        'label'=> Mage::helper('saksham')->__('Delete'),
-        'url'  => $this->getUrl('*/*/massDelete', array('' => '')),
-        'confirm' => Mage::helper('saksham')->__('Are you sure?')
-        ));
-         
         return $this;
-    }
-
-    public function getRowUrl($row)
-    {
-        return $this->getUrl('*/*/edit', array('entity_id' => $row->getId()));
     }
 }

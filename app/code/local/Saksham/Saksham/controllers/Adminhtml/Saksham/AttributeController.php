@@ -1,67 +1,29 @@
-<?php
-/**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magento.com for more information.
- *
- * @category    Mage
- * @package     Mage_Adminhtml
- * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
-
-/**
- * Catalog product attribute controller
- *
- * @category   Mage
- * @package    Mage_Adminhtml
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-
+<?php 
 class Saksham_Saksham_Adminhtml_Saksham_AttributeController extends Mage_Adminhtml_Controller_Action
 {
+	protected $_entityTypeId;
 
-    protected $_entityTypeId;
-
-    /**
-     * List of tags from setting
-     */
     const XML_PATH_ALLOWED_TAGS = 'system/catalog/frontend/allowed_html_tags_list';
 
-    /**
-     * Get list of allowed text formatted as array
-     *
-     * @return array
-     */
+    protected function _isAllowed()
+    {
+        return Mage::getSingleton('admin/session')->isAllowed('saksham/session');
+    }
+    
     protected function _getAllowedTags()
     {
         return explode(',', Mage::getStoreConfig(self::XML_PATH_ALLOWED_TAGS));
     }
 
-    public function preDispatch()
+	public function preDispatch()
     {
-        $this->_setForcedFormKeyActions('delete');
         parent::preDispatch();
-        $this->_entityTypeId = Mage::getModel('eav/entity')->setType(Mage_Catalog_Model_Product::ENTITY)->getTypeId();
+        $this->_entityTypeId = Mage::getModel('eav/entity')->setType(Saksham_Saksham_Model_Resource_Saksham::ENTITY)->getTypeId();
     }
 
-    protected function _initAction()
+	protected function _initAction()
     {
-        $this->_title($this->__('Saksham'))
+        $this->_title($this->__('saksham'))
              ->_title($this->__('Attributes'))
              ->_title($this->__('Manage Attributes'));
 
@@ -69,38 +31,38 @@ class Saksham_Saksham_Adminhtml_Saksham_AttributeController extends Mage_Adminht
             $this->loadLayout('popup');
         } else {
             $this->loadLayout()
-                ->_setActiveMenu('saksham/attributes')
+                ->_setActiveMenu('attribute')
                 ->_addBreadcrumb(Mage::helper('saksham')->__('saksham'), Mage::helper('saksham')->__('saksham'))
                 ->_addBreadcrumb(
-                    Mage::helper('saksham')->__('Manage Product Attributes'),
-                    Mage::helper('saksham')->__('Manage Product Attributes'))
+                    Mage::helper('saksham')->__('Manage Attributes'),
+                    Mage::helper('saksham')->__('Manage Attributes'))
             ;
         }
         return $this;
     }
 
-    public function indexAction()
-    {
-        $this->_initAction()
-            ->_addContent($this->getLayout()->createBlock('saksham/adminhtml_saksham_attribute'))
-            ->renderLayout();
-    }
+	public function indexAction(){
+		$this->loadLayout();
+		$this->_setActiveMenu('saksham');		
+		$this->_addContent($this->getLayout()->createBlock('saksham/adminhtml_saksham_attribute'));
+		$this->renderLayout();
+	}
 
-    public function newAction()
-    {
-        $this->_forward('edit');
-    }
+	public function newAction(){
+		$this->_forward('edit');
+	}
 
-    public function editAction()
-    {
+	public function editAction()
+    {	
         $id = $this->getRequest()->getParam('attribute_id');
+
         $model = Mage::getModel('saksham/resource_eav_attribute')
             ->setEntityTypeId($this->_entityTypeId);
         if ($id) {
             $model->load($id);
 
-            if (! $model->getId()) {
-                Mage::getSingleton('adminhtml/session')->addError(
+            if (!$model->getId()) {
+                Mage::getSingleton('saksham/session')->addError(
                     Mage::helper('saksham')->__('This attribute no longer exists'));
                 $this->_redirect('*/*/');
                 return;
@@ -108,15 +70,14 @@ class Saksham_Saksham_Adminhtml_Saksham_AttributeController extends Mage_Adminht
 
             // entity type check
             if ($model->getEntityTypeId() != $this->_entityTypeId) {
-                Mage::getSingleton('adminhtml/session')->addError(
+                Mage::getSingleton('saksham/session')->addError(
                     Mage::helper('saksham')->__('This attribute cannot be edited.'));
                 $this->_redirect('*/*/');
                 return;
             }
         }
+        $data = Mage::getSingleton('saksham/session')->getAttributeData(true);
 
-        // set entered data if was error when we do save
-        $data = Mage::getSingleton('adminhtml/session')->getAttributeData(true);
         if (! empty($data)) {
             $model->addData($data);
         }
@@ -127,17 +88,13 @@ class Saksham_Saksham_Adminhtml_Saksham_AttributeController extends Mage_Adminht
 
         $this->_title($id ? $model->getName() : $this->__('New Attribute'));
 
-        $item = $id ? Mage::helper('saksham')->__('Edit Product Attribute')
-                    : Mage::helper('saksham')->__('New Product Attribute');
+        $item = $id ? Mage::helper('saksham')->__('Edit Attribute')
+                    : Mage::helper('saksham')->__('New Attribute');
 
         $this->_addBreadcrumb($item, $item);
 
-        // $this->getLayout()->getBlock('attribute_edit_js')
-        //     ->setIsPopup((bool)$this->getRequest()->getParam('popup'));
-        $this->_addContent($this->getLayout()->createBlock(' saksham/adminhtml_saksham_attribute_edit'))
-                ->_addLeft($this->getLayout()
-                ->createBlock('saksham/adminhtml_saksham_attribute_edit_tabs'));
-
+        $this->_setActiveMenu('saksham');
+        
         $this->renderLayout();
 
     }
@@ -153,9 +110,9 @@ class Saksham_Saksham_Adminhtml_Saksham_AttributeController extends Mage_Adminht
             ->loadByCode($this->_entityTypeId, $attributeCode);
 
         if ($attribute->getId() && !$attributeId) {
-            Mage::getSingleton('adminhtml/session')->addError(
+            Mage::getSingleton('saksham/session')->addError(
                 Mage::helper('saksham')->__('Attribute with the same code already exists'));
-            $this->_initLayoutMessages('adminhtml/session');
+            $this->_initLayoutMessages('saksham/session');
             $response->setError(true);
             $response->setMessage($this->getLayout()->getMessagesBlock()->getGroupedHtml());
         }
@@ -163,18 +120,12 @@ class Saksham_Saksham_Adminhtml_Saksham_AttributeController extends Mage_Adminht
         $this->getResponse()->setBody($response->toJson());
     }
 
-    /**
-     * Filter post data
-     *
-     * @param array $data
-     * @return array
-     */
     protected function _filterPostData($data)
     {
         if ($data) {
-            /** @var $helperCatalog Mage_Catalog_Helper_Data */
+         
             $helperCatalog = Mage::helper('saksham');
-            //labels
+
             $data['frontend_label'] = (array) $data['frontend_label'];
             foreach ($data['frontend_label'] as & $value) {
                 if ($value) {
@@ -197,17 +148,17 @@ class Saksham_Saksham_Adminhtml_Saksham_AttributeController extends Mage_Adminht
     }
 
     public function saveAction()
-    {
+    {   
         $data = $this->getRequest()->getPost();
         if ($data) {
-            /** @var $session Mage_Admin_Model_Session */
-            $session = Mage::getSingleton('adminhtml/session');
+           
+            $session = Mage::getSingleton('saksham/session');
 
             $redirectBack   = $this->getRequest()->getParam('back', false);
-            /* @var $model Mage_Catalog_Model_Entity_Attribute */
+      
             $model = Mage::getModel('saksham/resource_eav_attribute');
-            /* @var $helper Mage_Catalog_Helper_Product */
-            $helper = Mage::helper('saksham');
+     
+            $helper = Mage::helper('saksham/saksham');
 
             $id = $this->getRequest()->getParam('attribute_id');
 
@@ -222,7 +173,6 @@ class Saksham_Saksham_Adminhtml_Saksham_AttributeController extends Mage_Adminht
                     return;
                 }
             }
-
 
             //validate frontend_input
             if (isset($data['frontend_input'])) {
@@ -256,7 +206,7 @@ class Saksham_Saksham_Adminhtml_Saksham_AttributeController extends Mage_Adminht
                     return;
                 }
 
-                $data['backend_model'] = $model->getBackendModel();
+                /*$data['backend_model'] = $model->getBackendModel();*/
                 $data['attribute_code'] = $model->getAttributeCode();
                 $data['is_user_defined'] = $model->getIsUserDefined();
                 $data['frontend_input'] = $model->getFrontendInput();
@@ -300,7 +250,6 @@ class Saksham_Saksham_Adminhtml_Saksham_AttributeController extends Mage_Adminht
                 $model->setIsUserDefined(1);
             }
 
-
             if ($this->getRequest()->getParam('set') && $this->getRequest()->getParam('group')) {
                 // For creating product attribute on product page we need specify attribute set and group
                 $model->setAttributeSetId($this->getRequest()->getParam('set'));
@@ -310,24 +259,13 @@ class Saksham_Saksham_Adminhtml_Saksham_AttributeController extends Mage_Adminht
             try {
                 $model->save();
                 $session->addSuccess(
-                    Mage::helper('saksham')->__('The product attribute has been saved.'));
+                    Mage::helper('saksham')->__('The saksham attribute has been saved.'));
 
-                /**
-                 * Clear translation cache because attribute labels are stored in translation
-                 */
                 Mage::app()->cleanCache(array(Mage_Core_Model_Translate::CACHE_TAG));
                 $session->setAttributeData(false);
-                if ($this->getRequest()->getParam('popup')) {
-                    $this->_redirect('saksham/adminhtml_saksham_attribute/index', array(
-                        'id'       => $this->getRequest()->getParam('product'),
-                        'attribute'=> $model->getId(),
-                        '_current' => true
-                    ));
-                } elseif ($redirectBack) {
-                    $this->_redirect('*/*/edit', array('attribute_id' => $model->getId(),'_current'=>true));
-                } else {
-                    $this->_redirect('*/*/', array());
-                }
+              
+                $this->_redirect('*/*/', array());
+               
                 return;
             } catch (Exception $e) {
                 $session->addError($e->getMessage());
@@ -339,7 +277,7 @@ class Saksham_Saksham_Adminhtml_Saksham_AttributeController extends Mage_Adminht
         $this->_redirect('*/*/');
     }
 
-    public function deleteAction()
+     public function deleteAction()
     {
         if ($id = $this->getRequest()->getParam('attribute_id')) {
             $model = Mage::getModel('saksham/resource_eav_attribute');
@@ -347,7 +285,7 @@ class Saksham_Saksham_Adminhtml_Saksham_AttributeController extends Mage_Adminht
             // entity type check
             $model->load($id);
             if ($model->getEntityTypeId() != $this->_entityTypeId || !$model->getIsUserDefined()) {
-                Mage::getSingleton('adminhtml/session')->addError(
+                Mage::getSingleton('saksham/session')->addError(
                     Mage::helper('saksham')->__('This attribute cannot be deleted.'));
                 $this->_redirect('*/*/');
                 return;
@@ -355,24 +293,19 @@ class Saksham_Saksham_Adminhtml_Saksham_AttributeController extends Mage_Adminht
 
             try {
                 $model->delete();
-                Mage::getSingleton('adminhtml/session')->addSuccess(
-                    Mage::helper('saksham')->__('The product attribute has been deleted.'));
+                Mage::getSingleton('saksham/session')->addSuccess(
+                    Mage::helper('saksham')->__('The attribute has been deleted.'));
                 $this->_redirect('*/*/');
                 return;
             }
             catch (Exception $e) {
-                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+                Mage::getSingleton('saksham/session')->addError($e->getMessage());
                 $this->_redirect('*/*/edit', array('attribute_id' => $this->getRequest()->getParam('attribute_id')));
                 return;
             }
         }
-        Mage::getSingleton('adminhtml/session')->addError(
+        Mage::getSingleton('saksham/session')->addError(
             Mage::helper('saksham')->__('Unable to find an attribute to delete.'));
         $this->_redirect('*/*/');
     }
-
-    // protected function _isAllowed()
-    // {
-    //     return Mage::getSingleton('admin/session')->isAllowed('catalog/attributes/attributes');
-    // }
 }

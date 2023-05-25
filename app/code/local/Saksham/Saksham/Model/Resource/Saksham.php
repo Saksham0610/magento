@@ -1,8 +1,11 @@
-<?php
-class Saksham_Saksham_Model_Resource_Saksham extends Mage_Core_Model_Resource_Db_Abstract
+<?php 
+class Saksham_Saksham_Model_Resource_Saksham extends Mage_Eav_Model_Entity_Abstract
 {
-    function _construct()
-    {
-        $this->_init('saksham/saksham', 'entity_id');
+	const ENTITY = 'saksham';
+	public function __construct()
+	{
+		$this->setType(self::ENTITY)
+			 ->setConnection('core_read', 'core_write');
+	   parent::__construct();
     }
 }

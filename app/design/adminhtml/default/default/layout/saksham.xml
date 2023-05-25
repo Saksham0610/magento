@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+	<saksham_adminhtml_saksham_attribute_edit>
+		<reference name="content">
+			<block type="saksham/adminhtml_saksham_attribute_edit" name="sakshamAttributeEdit"/>
+		</reference>
+		 <reference name="left">
+            <block type="saksham/adminhtml_saksham_attribute_edit_tabs" name="saksham_edit_tabs"></block>
+        </reference>
+        <reference name="js">
+            <block type="adminhtml/template" name="attribute_edit_js" template="saksham/attribute/js.phtml"></block>
+        </reference>
+	</saksham_adminhtml_saksham_attribute_edit>
+	
+	<saksham_adminhtml_saksham_edit>
+		<reference name="content">
+			<block type="saksham/adminhtml_saksham_edit" name="sakshamEdit"/>
+		</reference>
+		<reference name="left">
+			<block type="saksham/adminhtml_saksham_edit_Tabs" name="sakshamEditTabs"/>
+		</reference>
+		<reference name="js">
+            <block type="adminhtml/catalog_product_edit_js" template="catalog/product/js.phtml" name="catalog_product_js"></block>
+            <block type="core/template" template="catalog/wysiwyg/js.phtml"/>
+        </reference>
+	</saksham_adminhtml_saksham_edit>	
+</layout>

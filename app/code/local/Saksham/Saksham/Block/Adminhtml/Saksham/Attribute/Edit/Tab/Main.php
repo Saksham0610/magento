@@ -1,54 +1,15 @@
 <?php
-/**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magento.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magento.com for more information.
- *
- * @category    Mage
- * @package     Mage_Adminhtml
- * @copyright  Copyright (c) 2006-2020 Magento, Inc. (http://www.magento.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
-
-
-/**
- * Product attribute add/edit form main tab
- *
- * @category   Mage
- * @package    Mage_Adminhtml
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 class Saksham_Saksham_Block_Adminhtml_Saksham_Attribute_Edit_Tab_Main
     extends Mage_Eav_Block_Adminhtml_Attribute_Edit_Main_Abstract
 {
-    /**
-     * Adding product form elements for editing attribute
-     *
-     * @return Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit_Tab_Main
-     */
     protected function _prepareForm()
     {
         parent::_prepareForm();
-        $attributeObject = $this->getAttributeObject();
-        /* @var $form Varien_Data_Form */
-        $form = $this->getForm();
-        /* @var $fieldset Varien_Data_Form_Element_Fieldset */
-        $fieldset = $form->getElement('base_fieldset');
 
+        $attributeObject = $this->getAttributeObject();
+
+        $form = $this->getForm();
+        $fieldset = $form->getElement('base_fieldset');
         $fieldset->getElements()
             ->searchById('attribute_code')
             ->setData(
@@ -59,28 +20,27 @@ class Saksham_Saksham_Block_Adminhtml_Saksham_Attribute_Edit_Tab_Main
                 $fieldset->getElements()->searchById('attribute_code')->getData('note')
                 . Mage::helper('eav')->__('. Do not use "event" for an attribute code, it is a reserved keyword.')
             );
-
         $frontendInputElm = $form->getElement('frontend_input');
         $additionalTypes = array(
             array(
                 'value' => 'price',
                 'label' => Mage::helper('saksham')->__('Price')
+            ),
+            array(
+                'value' => 'media_image',
+                'label' => Mage::helper('saksham')->__('Media Image')
             )
-            // array(
-            //     'value' => 'media_image',
-            //     'label' => Mage::helper('saksham')->__('Media Image')
-            // )
         );
-        // if ($attributeObject->getFrontendInput() == 'gallery') {
-        //     $additionalTypes[] = array(
-        //         'value' => 'gallery',
-        //         'label' => Mage::helper('saksham')->__('Gallery')
-        //     );
-        // }
+        if ($attributeObject->getFrontendInput() == 'gallery') {
+            $additionalTypes[] = array(
+                'value' => 'gallery',
+                'label' => Mage::helper('saksham')->__('Gallery')
+            );
+        }
 
         $response = new Varien_Object();
         $response->setTypes(array());
-        Mage::dispatchEvent('adminhtml_product_attribute_types', array('response'=>$response));
+      
         $_disabledTypes = array();
         $_hiddenFields = array();
         foreach ($response->getTypes() as $type) {
@@ -101,16 +61,16 @@ class Saksham_Saksham_Block_Adminhtml_Saksham_Attribute_Edit_Tab_Main
         $yesnoSource = Mage::getModel('adminhtml/system_config_source_yesno')->toOptionArray();
 
         $scopes = array(
-            Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_STORE =>Mage::helper('saksham')->__('Store View'),
-            Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_WEBSITE =>Mage::helper('saksham')->__('Website'),
-            Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL =>Mage::helper('saksham')->__('Global'),
+            Saksham_Saksham_Model_Resource_Eav_Attribute::SCOPE_STORE =>Mage::helper('saksham')->__('Store View'),
+            Saksham_Saksham_Model_Resource_Eav_Attribute::SCOPE_WEBSITE =>Mage::helper('saksham')->__('Website'),
+            Saksham_Saksham_Model_Resource_Eav_Attribute::SCOPE_GLOBAL =>Mage::helper('saksham')->__('Global'),
         );
 
         if (
             $attributeObject->getAttributeCode() == 'status'
             || $attributeObject->getAttributeCode() == 'tax_class_id'
         ) {
-            unset($scopes[Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_STORE]);
+            unset($scopes[Saksham_Saksham_Model_Resource_Eav_Attribute::SCOPE_STORE]);
         }
 
         $fieldset->addField('is_global', 'select', array(
@@ -121,25 +81,9 @@ class Saksham_Saksham_Block_Adminhtml_Saksham_Attribute_Edit_Tab_Main
             'values'=> $scopes
         ), 'attribute_code');
 
-        $fieldset->addField('apply_to', 'apply', array(
-            'name'        => 'apply_to[]',
-            'label'       => Mage::helper('saksham')->__('Apply To'),
-            'values'      => Mage_Catalog_Model_Product_Type::getOptions(),
-            'mode_labels' => array(
-                'all'     => Mage::helper('saksham')->__('All Product Types'),
-                'custom'  => Mage::helper('saksham')->__('Selected Product Types')
-            ),
-            'required'    => true
-        ), 'frontend_class');
-
-        $fieldset->addField('is_configurable', 'select', array(
-            'name' => 'is_configurable',
-            'label' => Mage::helper('saksham')->__('Use To Create Configurable Product'),
-            'values' => $yesnoSource,
-        ), 'apply_to');
 
         // frontend properties fieldset
-        $fieldset = $form->addFieldset('front_fieldset', array('legend'=>Mage::helper('catalog')->__('Frontend Properties')));
+        $fieldset = $form->addFieldset('front_fieldset', array('legend'=>Mage::helper('saksham')->__('Frontend Properties')));
 
         $fieldset->addField('is_searchable', 'select', array(
             'name'     => 'is_searchable',
@@ -236,14 +180,7 @@ class Saksham_Saksham_Block_Adminhtml_Saksham_Attribute_Edit_Tab_Main
             'values'    => $yesnoSource,
         ));
 
-        $form->getElement('apply_to')->setSize(5);
-
-        if ($applyTo = $attributeObject->getApplyTo()) {
-            $applyTo = is_array($applyTo) ? $applyTo : explode(',', $applyTo);
-            $form->getElement('apply_to')->setValue($applyTo);
-        } else {
-            $form->getElement('apply_to')->addClass('no-display ignore-validate');
-        }
+        
 
         // define field dependencies
         $this->setChild('form_after', $this->getLayout()->createBlock('adminhtml/widget_form_element_dependence')
@@ -254,23 +191,6 @@ class Saksham_Saksham_Block_Adminhtml_Saksham_Attribute_Edit_Tab_Main
             ->addFieldDependence('html_allowed_on_front', 'wysiwyg_enabled', '0')
         );
 
-        Mage::dispatchEvent('adminhtml_catalog_product_attribute_edit_prepare_form', array(
-            'form'      => $form,
-            'attribute' => $attributeObject
-        ));
-
         return $this;
-    }
-
-    /**
-     * Retrieve additional element types for product attributes
-     *
-     * @return array
-     */
-    protected function _getAdditionalElementTypes()
-    {
-        return array(
-            'apply'         => Mage::getConfig()->getBlockClassName('adminhtml/catalog_product_helper_form_apply'),
-        );
     }
 }

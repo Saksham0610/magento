@@ -1,8 +1,9 @@
 <?php
-class Saksham_Saksham_Model_Resource_Saksham_Collection extends Mage_Core_Model_Resource_Db_Collection_Abstract
+class Saksham_Saksham_Model_Resource_Saksham_Collection extends Mage_Catalog_Model_Resource_Collection_Abstract
 {
-    protected function _construct()
-    {
-        $this->_init('saksham/saksham');
-    }
+	public function __construct()
+	{
+		$this->setEntity('saksham');
+		parent::__construct();	
+	}
 }
