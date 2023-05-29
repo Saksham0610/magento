@@ -175,47 +175,4 @@ class Saksham_Eavmgmt_Adminhtml_EavmgmtController extends Mage_Adminhtml_Control
         $this->_prepareDownloadResponse($fileName, $grid->getCsvFile());
         $this->_redirect('*/*/index');
     }
-
-    protected function _getCsvContentOption()
-    {
-        $attributeIds = $this->getRequest()->getPost('attribute_id');
-        $collection = Mage::getResourceModel('eav/entity_attribute_option_collection');
-        $collection->getSelect()
-            ->join(
-                array('ea' => 'eav_attribute'),
-                'main_table.attribute_id = ea.attribute_id',
-                array('entity_type_id','frontend_label','attribute_code')
-            );
-        $collection->addFieldToFilter('main_table.attribute_id', array('in' => $attributeIds));
-        $content = '';
-        $headers = array(
-            'index' => 'Index',
-            'attribute_id' => 'Attribute Id',
-            'attribute_code' => 'Attribute Code',
-            'frontend_label' => 'Attribute Name',
-            'option_id' => 'Option Id',
-            'value' => 'Option Name',
-            'sort_order' => 'Option Sort Order'
-        );
-        $content .= '"' . implode('","', $headers) . '"' . "\n";
-        $i = 0;
-        foreach ($collection as $item) {
-            $i += 1; 
-            $row = array(
-                $i,
-                $item->attribute_id,
-                $item->attribute_code,
-                $item->frontend_label,
-                $item->frontend_input,
-                $item->backend_type,
-                $item->source_model
-            );
-            $row = array_map(function($value) {
-                return '"' . str_replace('"', '""', $value) . '"';
-            }, $row);
-            $content .= implode(',', $row) . "\n";
-        }
-        return $content;
-    }
-
 }
