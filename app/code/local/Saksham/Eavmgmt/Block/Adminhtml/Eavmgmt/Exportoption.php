@@ -16,7 +16,6 @@ class Saksham_Eavmgmt_Block_Adminhtml_Eavmgmt_Exportoption extends Mage_Eav_Bloc
             'renderer'=> 'Saksham_Eavmgmt_Block_Adminhtml_Eavmgmt_Csv_EntityType'
         ));
 
-
         $this->addColumn('attribute_code', array(
             'header'=>Mage::helper('eav')->__('Attribute Code'),
             'sortable'=>true,
@@ -48,10 +47,6 @@ class Saksham_Eavmgmt_Block_Adminhtml_Eavmgmt_Exportoption extends Mage_Eav_Bloc
             'index'=>'sort_order'
         ));
 
-
         return $this;
-
     }
- 
-   
 }

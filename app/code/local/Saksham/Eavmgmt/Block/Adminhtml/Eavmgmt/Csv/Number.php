@@ -17,7 +17,6 @@ class Saksham_Eavmgmt_Block_Adminhtml_Eavmgmt_Csv_Number extends Mage_Adminhtml_
     public function setIndex($index)
     {
         $this->index = $index;
-
         return $this;
     }
 }

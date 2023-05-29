@@ -6,10 +6,8 @@ class Saksham_Eavmgmt_Block_Adminhtml_eavmgmt_Csv_EntityOption extends Mage_Admi
 		$id = $row->getOptionId();
 		$resource = Mage::getSingleton('core/resource');
 		$readConnection = $resource->getConnection('core_read');
-
 		$tableName = $resource->getTableName('eav_attribute_option_value');
 		$select = $readConnection->select()->from($tableName, array('option_id', 'value'));
-
 		$pairs = $readConnection->fetchPairs($select);
 		return $pairs[$id];
 	}

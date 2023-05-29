@@ -1,5 +1,4 @@
 <?php
-
 class Saksham_Eavmgmt_Block_Adminhtml_Eavmgmt_Grid extends Mage_Eav_Block_Adminhtml_Attribute_Grid_Abstract
 {
     public function __construct()
@@ -12,7 +11,8 @@ class Saksham_Eavmgmt_Block_Adminhtml_Eavmgmt_Grid extends Mage_Eav_Block_Adminh
 
    protected function _prepareCollection()
     {
-        $collection = Mage::getModel('eavmgmt/eavmgmt')->getCollection();
+        $model = Mage::getModel('eavmgmt/eavmgmt');
+        $collection = $model->getCollection();
         $collection->getSelect()
                     ->joinLeft(
                         array('eet'=> 'eav_entity_type'),
@@ -45,20 +45,8 @@ class Saksham_Eavmgmt_Block_Adminhtml_Eavmgmt_Grid extends Mage_Eav_Block_Adminh
                 'header'    => Mage::helper('eavmgmt')->__('Action'),
                 'width'     => '50px',
                 'type'      => 'action',
-                'getter'     => 'getId',
-                'actions'   => array(
-                    array(
-                        'caption' => Mage::helper('eavmgmt')->__('Options'),
-                        'url'     => array(
-                            'base'=>'*/*/edit',
-                            'params'=>array('store'=>$this->getRequest()->getParam('attribute_id'))
-                        ),
-                        'field'   => 'attribute_id'
-                    )
-                ),
-                'filter'    => false,
-                'sortable'  => false,
-                'index'     => 'stores',
+                'getter'    => 'getId',
+                'renderer'  => 'saksham_eavmgmt_block_adminhtml_eavmgmt_csv_showOption' 
         ));
 
         return $this;
@@ -88,5 +76,4 @@ class Saksham_Eavmgmt_Block_Adminhtml_Eavmgmt_Grid extends Mage_Eav_Block_Adminh
     {
         return $this->getUrl('*/*/edit', array('attribute_id' => $row->getId()));
     }
-   
 }
