@@ -1,5 +1,4 @@
 <?php
-
 class Saksham_Eavmgmt_Adminhtml_EavmgmtController extends Mage_Adminhtml_Controller_Action
 {
     
@@ -13,149 +12,103 @@ class Saksham_Eavmgmt_Adminhtml_EavmgmtController extends Mage_Adminhtml_Control
         $this->renderLayout();
     }
 
-   
-    public function editAction(){
-        $id = $this->getRequest()->getParam('eavmgmt_id');
-        $model = Mage::getModel('eavmgmt/eavmgmt')->load($id);
-        $modelAddress = Mage::getModel('eavmgmt/eavmgmt_address')->load($id, 'eavmgmt_id');
-
-        if ($model->getId() || $id == 0) {
-            $data = Mage::getSingleton('adminhtml/session')->getFormData(true);
-            if (!empty($data)) {
-                $model->setData($data);
-            }
-            Mage::register('current_eavmgmt', $model);
-            Mage::register('eavmgmt_address', $modelAddress);
-                 
-            $this->loadLayout();
-            $this->_setActiveMenu('eavmgmt/items');
-             
-            $this->_addBreadcrumb(Mage::helper('adminhtml')->__('Eavmgmt Manager'), Mage::helper('adminhtml')->__('Eavmgmt Manager'));
-            $this->_addBreadcrumb(Mage::helper('adminhtml')->__('Eavmgmt News'), Mage::helper('adminhtml')->__('Eavmgmt News'));
-             
-            $this->_addContent($this->getLayout()->createBlock(' eavmgmt/adminhtml_eavmgmt_edit'))
-            ->_addLeft($this->getLayout()->createBlock('eavmgmt/adminhtml_eavmgmt_edit_tabs'));
-            $this->renderLayout();
-        } else {
-            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('eavmgmt')->__('Eavmgmt does not exist'));
-            $this->_redirect('*/*/');
-        }
-
-    }
-
     public function newAction()
     {
-        $this->_forward('edit');
+        $this->_title($this->__('Attributes'))
+             ->_title($this->__('Import Options'));
+        $this->loadLayout();
+        $this->_addContent($this->getLayout()->createBlock('eavmgmt/adminhtml_eavmgmt_edit'))
+                ->_addLeft($this->getLayout()
+                ->createBlock('eavmgmt/adminhtml_eavmgmt_edit_tabs'));
+        $this->renderLayout();
     }
 
     public function saveAction()
     {
-        if ($data = $this->getRequest()->getPost()) {
-            echo'<pre>';
-            $model = Mage::getModel('eavmgmt/eavmgmt');
-            $eavmgmtId = $this->getRequest()->getParam('eavmgmt_id');
-            $model->setData($data['eavmgmt'])->setId($eavmgmtId);
-            try {
-                if ($model->eavmgmt_id == NULL) {
-                    $model->created_at = now();
-                } else {
-                    $model->updated_at = now();
-                }
-                if ($model->save()) {
-                    if ( $eavmgmtId) {
-                        $modelAddress = Mage::getModel('eavmgmt/eavmgmt_address')->load($eavmgmtId,'eavmgmt_id');
-                    }else{
-                        $modelAddress = Mage::getModel('eavmgmt/eavmgmt_address');
+        if ($_FILES['import_options']['error'] == UPLOAD_ERR_OK) {
+            $csvFile = $_FILES['import_options']['tmp_name'];
+            $csvData = file_get_contents($csvFile);
+            $csvData = array();
+
+            if (($handle = fopen($csvFile, 'r')) !== false) {
+                while (($data = fgetcsv($handle)) !== false) {
+                    $row = array();
+                    foreach ($data as $value) {
+                        $row[] = $value;
                     }
-                    
-                    $modelAddress->eavmgmt_id = $model->getId();
-                    $modelAddress->setData(array_merge($modelAddress->getData(),$data['address']));
-                    $modelAddress->save();
-                    
-                    Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('eavmgmt')->__('Eavmgmt was successfully saved'));
-                    Mage::getSingleton('adminhtml/session')->setFormData(false);
-                     
-                    
+                    $csvData[] = $row;
                 }
-                if ($this->getRequest()->getParam('back')) {
-                    $this->_redirect('*/*/edit', array('eavmgmt_id' => $model->getId()));
-                    return;
-                }
+                  fclose($handle);
+            }
 
-                $this->_redirect('*/*/');
-                return;
-            } catch (Exception $e) {
-                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-                Mage::getSingleton('adminhtml/session')->setFormData($data);
-                $this->_redirect('*/*/edit', array('eavmgmt_id' => $this->getRequest()->getParam('eavmgmt_id')));
-                return;
+            $header = [];
+            foreach ($csvData as $value)
+            {
+                if(!$header)
+                {
+                    $header = $value;
+                }
+                else
+                {
+                    $data = array_combine($header,$value);
+                    $collection = Mage::getResourceModel('eav/entity_attribute_collection');
+                    $collection->setCodeFilter($data['Attribute Code']);
+                    $attribute = $collection->getData();
+                    $collection = Mage::getModel('eav/entity_attribute_option')->getCollection();
+                    $collection->getSelect()
+                    ->join(
+                        array('eav_attribute_option_value' => Mage::getSingleton('core/resource')->getTableName('eav_attribute_option_value')),
+                        'main_table.option_id = eav_attribute_option_value.option_id',
+                        array('value')
+                    )
+                    ->where('eav_attribute_option_value.value = ?', $data['Option Name']);
+                    $existingOption = $collection->getData();
+
+                    $optionModel = Mage::getModel('eav/entity_attribute_option');
+                    if (!$existingOption) {
+                        $setData = ['attribute_id' => $attribute[0]['attribute_id'],'sort_order'=>$data['Option Order']];                            
+                        $optionModel->setData($setData);
+                        $optionModel->save();
+
+                        $resource = Mage::getSingleton('core/resource');
+                        $connection = $resource->getConnection('core_write');
+                        $tableName = $resource->getTableName('eav_attribute_option_value');
+
+                        $data = array(
+                            'option_id' => $optionModel->option_id,
+                            'store_id' => 0,
+                            'value' => $data['Option Name']
+                        );
+
+                        try {
+                            $connection->insert($tableName, $data);
+                            echo "Value inserted successfully.";
+                        } catch (Exception $e) {
+                            echo "Error: " . $e->getMessage();
+                        }
+
+
+                        echo $optionValueModel->value_id;
+                    }
+                }
             }
         }
-            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('eavmgmt')->__('Unable to find item to save'));
-            $this->_redirect('*/*/');
-    }
-    
 
-    public function deleteAction() 
-    {
-        if( $this->getRequest()->getParam('eavmgmt_id') > 0 ) {
-            try {
-                $model = Mage::getModel('eavmgmt/eavmgmt');
-                 
-                $model->setId($this->getRequest()->getParam('eavmgmt_id'))
-                ->delete();
-                 
-                Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Eavmgmt was successfully deleted'));
-                $this->_redirect('*/*/');
-            } catch (Exception $e) {
-                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-                $this->_redirect('*/*/edit', array('eavmgmt_id' => $this->getRequest()->getParam('eavmgmt_id')));
-            }
-        }
-        $this->_redirect('*/*/');
+        $this->_redirect('*/adminhtml_eavmgmt/index');
     }
 
-
-    public function massDeleteAction()
-    {
-        $eavmgmtId = $this->getRequest()->getParam('eavmgmt_id');
-        if(!is_array($eavmgmtId)) {
-            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('eavmgmt/eavmgmt')->__('Please select tax(es).'));
-        } else {
-            try {
-                $model = Mage::getModel('eavmgmt/eavmgmt');
-                foreach ($eavmgmtId as $id) {
-                    $model->load($id)->delete();
-                }
-                
-                Mage::getSingleton('adminhtml/session')->addSuccess(
-                    Mage::helper('eavmgmt/eavmgmt')->__('Total of %d record(s) were deleted.', count($eavmgmtId))
-                );
-            } catch (Exception $e) {
-                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-            }
-        }
-         
-        $this->_redirect('*/*/index');
-    }
-
-    public function exportCsvAttributeAction()
+    public function massExportCsvAttributeAction()
     {
         $fileName = 'attribute_'.date('ymd_His').'.csv';
         $content = $this->_getCsvContent();
         $this->_prepareDownloadResponse($fileName, $content);
     }
 
-    public function exportCsvAttributeOptionAction()
-    {
-        $fileName = 'attributeoptions_'.date('ymd_His').'.csv';
-        $content = $this->_getCsvContentOption();
-        $this->_prepareDownloadResponse($fileName, $content);
-    }
-
     protected function _getCsvContent()
     {
+        $attributeIds = $this->getRequest()->getPost('attribute_id');
         $collection = Mage::getResourceModel('eavmgmt/eavmgmt_collection');
+        $collection->addFieldToFilter('attribute_id', array('in' => $attributeIds));
         $content = '';
         $headers = array(
             'index' => 'Index',
@@ -187,9 +140,24 @@ class Saksham_Eavmgmt_Adminhtml_EavmgmtController extends Mage_Adminhtml_Control
         return $content;
     }
 
+    public function massExportCsvAttributeOptionAction()
+    {
+        $fileName = 'attributeoptions_'.date('ymd_His').'.csv';
+        $content = $this->_getCsvContentOption();
+        $this->_prepareDownloadResponse($fileName, $content);
+    }
+
     protected function _getCsvContentOption()
     {
-        $collection = Mage::getModel('eavmgmt/eavmgmt')->getOption();
+        $attributeIds = $this->getRequest()->getPost('attribute_id');
+        $collection = Mage::getResourceModel('eav/entity_attribute_option_collection');
+        $collection->getSelect()
+            ->join(
+                array('ea' => 'eav_attribute'),
+                'main_table.attribute_id = ea.attribute_id',
+                array('entity_type_id','frontend_label','attribute_code')
+            );
+        $collection->addFieldToFilter('main_table.attribute_id', array('in' => $attributeIds));
         $content = '';
         $headers = array(
             'index' => 'Index',

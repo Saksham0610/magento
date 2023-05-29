@@ -15,14 +15,13 @@ class Saksham_Eavmgmt_Block_Adminhtml_Eavmgmt_Grid extends Mage_Eav_Block_Adminh
         $collection = Mage::getModel('eavmgmt/eavmgmt')->getCollection();
         $collection->getSelect()
                     ->joinLeft(
-                        array('cea'=> 'catalog_eav_attribute'),
-                        "cea.attribute_id = main_table.attribute_id"
-                    )
-                    ->joinLeft(
                         array('eet'=> 'eav_entity_type'),
                         "eet.entity_type_id = main_table.entity_type_id"
                     );
-        // echo "<pre>";print_r($collection->getData());die();
+                    // ->joinRight(
+                    //     array('additional_table' => $collection->getTable('catalog/eav_attribute')),
+                    //     'additional_table.attribute_id = main_table.attribute_id'
+                    // );
         $this->setCollection($collection);
         Mage::register('entity_type', $collection->getData());
         return parent::_prepareCollection();
@@ -115,7 +114,7 @@ class Saksham_Eavmgmt_Block_Adminhtml_Eavmgmt_Grid extends Mage_Eav_Block_Adminh
                 'getter'     => 'getId',
                 'actions'   => array(
                     array(
-                        'caption' => Mage::helper('eavmgmt')->__('Import'),
+                        'caption' => Mage::helper('eavmgmt')->__('Options'),
                         'url'     => array(
                             'base'=>'*/*/edit',
                             'params'=>array('store'=>$this->getRequest()->getParam('attribute_id'))
@@ -128,9 +127,6 @@ class Saksham_Eavmgmt_Block_Adminhtml_Eavmgmt_Grid extends Mage_Eav_Block_Adminh
                 'index'     => 'stores',
         ));
 
-        $this->addExportType('*/*/exportCsvAttribute', Mage::helper('eavmgmt')->__('Attributes'));
-        $this->addExportType('*/*/exportCsvAttributeOption', Mage::helper('eavmgmt')->__('Attribute Options'));
-
         return $this;
     }
 
@@ -138,10 +134,16 @@ class Saksham_Eavmgmt_Block_Adminhtml_Eavmgmt_Grid extends Mage_Eav_Block_Adminh
     {
         $this->setMassactionIdField('attribute_id');
         $this->getMassactionBlock()->setFormFieldName('attribute_id');
-         
-        $this->getMassactionBlock()->addItem('delete', array(
-        'label'=> Mage::helper('eavmgmt')->__('Delete'),
-        'url'  => $this->getUrl('*/*/massDelete', array('' => '')),
+
+        $this->getMassactionBlock()->addItem('export', array(
+        'label'=> Mage::helper('eavmgmt')->__('Export'),
+        'url'  => $this->getUrl('*/*/massExportCsvAttribute', array('' => '')),
+        'confirm' => Mage::helper('eavmgmt')->__('Are you sure?')
+        ));
+
+        $this->getMassactionBlock()->addItem('export_options', array(
+        'label'=> Mage::helper('eavmgmt')->__('Export Options'),
+        'url'  => $this->getUrl('*/*/massExportCsvAttributeOption', array('' => '')),
         'confirm' => Mage::helper('eavmgmt')->__('Are you sure?')
         ));
          

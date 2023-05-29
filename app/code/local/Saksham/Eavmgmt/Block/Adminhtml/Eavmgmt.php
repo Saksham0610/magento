@@ -12,7 +12,7 @@ class Saksham_Eavmgmt_Block_Adminhtml_Eavmgmt extends Mage_Adminhtml_Block_Widge
         parent::__construct();
 
         if ($this->_isAllowedAction('save')) {
-            $this->_updateButton('add', 'label', Mage::helper('eavmgmt')->__('Add New Eavmgmt'));
+            $this->_updateButton('add', 'label', Mage::helper('eavmgmt')->__('Import Attribute Options'));
         } else {
             $this->_removeButton('add');
         }
