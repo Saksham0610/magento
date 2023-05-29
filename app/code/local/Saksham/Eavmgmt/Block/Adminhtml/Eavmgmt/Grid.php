@@ -18,6 +18,7 @@ class Saksham_Eavmgmt_Block_Adminhtml_Eavmgmt_Grid extends Mage_Eav_Block_Adminh
                         array('eet'=> 'eav_entity_type'),
                         "eet.entity_type_id = main_table.entity_type_id"
                     );
+                    
                     // ->joinRight(
                     //     array('additional_table' => $collection->getTable('catalog/eav_attribute')),
                     //     'additional_table.attribute_id = main_table.attribute_id'
