@@ -21,6 +21,17 @@ class Saksham_Idx_Adminhtml_IdxController extends Mage_Adminhtml_Controller_Acti
         $this->_redirect('*/*/index');
     }
 
+    public function collectionAction()
+    {
+        try {
+            Mage::getModel('idx/idx')->updateTableColumn(Mage::getModel('collection/collection'), 'collection');
+            Mage::getSingleton('adminhtml/session')->addSuccess('Collection is up to date');
+        } catch (Exception $e) {
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+        $this->_redirect('*/*/index');
+    }
+
     public function massDeleteAction()
     {
         try { 

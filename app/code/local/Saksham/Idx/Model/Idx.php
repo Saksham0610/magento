@@ -28,17 +28,18 @@ class Saksham_Idx_Model_Idx extends Mage_Core_Model_Abstract
 
     public function updateTableColumn($model, $column)
     {
+    	$primaryKey = $column.'_id';
         $collection = $this->getCollection();
         $collectionArray = $collection->getData();
 
-        $idxModelId = array_column($collectionArray, $column.'_id');
+        $idxModelId = array_column($collectionArray, $primaryKey);
         $idxModelNames = array_column($collectionArray, $column);
         $idxModelNames = array_combine($idxModelId, $idxModelNames);
 
         $modelCollection = $model->getCollection();
         $modelCollectionArray = $model->getCollection()->getData();
 
-        $modelBrandId = array_column($modelCollectionArray, $column.'_id');
+        $modelBrandId = array_column($modelCollectionArray, $primaryKey);
         $modelNames = array_column($modelCollectionArray,'name');
         $modelNames = array_combine($modelBrandId,$modelNames);
 
@@ -51,7 +52,7 @@ class Saksham_Idx_Model_Idx extends Mage_Core_Model_Abstract
 	            $connection = $resource->getConnection('core_write');
 	            $tableName = $resource->getTableName('import_product_idx');
 	            $condition = '`index` = '.$idx->index;
-	            $query = "UPDATE `{$tableName}` SET `brand_id` = {$modelId} WHERE {$condition}";
+	            $query = "UPDATE `{$tableName}` SET `{$primaryKey}` = {$modelId} WHERE {$condition}";
 	            $connection->query($query); 
             }
         }
