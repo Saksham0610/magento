@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <eavmgmt translate="title" module="eavmgmt">
+            <title>Eavmgmt</title>
+            <sort_order>140</sort_order>
+            <children>
+                <manage translate="title" module="eavmgmt">
+                    <title>Manage Eavmgmt</title>
+                    <action>eavmgmt/adminhtml_eavmgmt/index</action>
+                    <sort_order>10</sort_order>
+                </manage>
+                </children>
+        </eavmgmt>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <eavmgmt translate="title" module="eavmgmt">
+                        <title>Eavmgmt</title>
+                        <sort_order>40</sort_order>
+                        <children>
+                             <manage translate="title" module="eavmgmt">
+                                <title>Manage Eavmgmt</title>
+                                <action>eavmgmt/adminhtml_eavmgmt/index</action>
+                                <sort_order>10</sort_order>
+                            </manage>
+                        </children>
+                    </eavmgmt>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <eavmgmt translate="title" module="eavmgmt">
+                                        <title>Eavmgmt Section</title>
+                                        <sort_order>50</sort_order>
+                                    </eavmgmt>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

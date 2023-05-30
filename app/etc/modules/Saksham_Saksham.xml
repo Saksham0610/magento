@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Saksham_Saksham>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Saksham_Saksham>
+    </modules>
+</config>
