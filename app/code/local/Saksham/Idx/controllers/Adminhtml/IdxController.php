@@ -10,6 +10,17 @@ class Saksham_Idx_Adminhtml_IdxController extends Mage_Adminhtml_Controller_Acti
         $this->renderLayout();
     }
 
+    public function brandAction()
+    {
+        try {
+            Mage::getModel('idx/idx')->updateTableColumn(Mage::getModel('brand/brand'), 'brand');
+            Mage::getSingleton('adminhtml/session')->addSuccess('Brand is up to date');
+        } catch (Exception $e) {
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+        $this->_redirect('*/*/index');
+    }
+
     public function massDeleteAction()
     {
         try { 
@@ -30,6 +41,7 @@ class Saksham_Idx_Adminhtml_IdxController extends Mage_Adminhtml_Controller_Acti
         } catch (Exception $e) {
             Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
         }
+
         $this->_redirect('*/*/index');
     }
 }
