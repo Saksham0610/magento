@@ -49,6 +49,12 @@ class Saksham_Idx_Block_Adminhtml_Idx_Grid extends Mage_Adminhtml_Block_Widget_G
             'index'     => 'price'
         ));
 
+        $this->addColumn('cost', array(
+            'header'    => Mage::helper('idx')->__('Cost'),
+            'align'     => 'left',
+            'index'     => 'cost'
+        ));
+
         $this->addColumn('quantity', array(
             'header'    => Mage::helper('idx')->__('Quantity'),
             'align'     => 'left',

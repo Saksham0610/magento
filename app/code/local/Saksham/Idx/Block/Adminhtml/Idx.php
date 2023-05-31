@@ -13,25 +13,25 @@ class Saksham_Idx_Block_Adminhtml_Idx extends Mage_Adminhtml_Block_Widget_Grid_C
     protected function _prepareLayout()
     {
         $this->_addButton('import', array(
-            'label'   => Mage::helper('catalog')->__('Import Idx'),
+            'label'   => Mage::helper('idx')->__('Import Idx'),
             'onclick' => "setLocation('{$this->getUrl('*/*/edit')}')",
             'class'   => 'import'
         ));
 
         $this->_addButton('brand', array(
-            'label'   => Mage::helper('catalog')->__('Brand'),
+            'label'   => Mage::helper('idx')->__('Brand'),
             'onclick' => "setLocation('{$this->getUrl('*/*/brand')}')",
             'class'   => 'brand'
         ));
 
         $this->_addButton('collection', array(
-            'label'   => Mage::helper('catalog')->__('Collection'),
+            'label'   => Mage::helper('idx')->__('Collection'),
             'onclick' => "setLocation('{$this->getUrl('*/*/collection')}')",
             'class'   => 'collection'
         ));
 
         $this->_addButton('product', array(
-            'label'   => Mage::helper('catalog')->__('Product'),
+            'label'   => Mage::helper('idx')->__('Product'),
             'onclick' => "setLocation('{$this->getUrl('*/*/product')}')",
             'class'   => 'product'
         ));
