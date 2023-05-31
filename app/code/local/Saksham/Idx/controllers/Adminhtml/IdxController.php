@@ -166,7 +166,7 @@ class Saksham_Idx_Adminhtml_IdxController extends Mage_Adminhtml_Controller_Acti
             }
 
             $missingProducts = $idxCollection->addFieldToFilter('product_id', 0);
-
+            
             foreach ($missingProducts as $missingProduct) {
                 $productData = [
                     'entity_type_id' => 4,
