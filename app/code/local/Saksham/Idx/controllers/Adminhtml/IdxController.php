@@ -139,6 +139,8 @@ class Saksham_Idx_Adminhtml_IdxController extends Mage_Adminhtml_Controller_Acti
     public function productAction()
     {
         try {
+            $idxTable = Mage::getSingleton('core/resource')->getTableName('import_product_idx');
+
             $idxCollection = Mage::getModel('idx/idx')->getCollection(); 
 
             foreach ($idxCollection as $idxRow) {
@@ -150,6 +152,8 @@ class Saksham_Idx_Adminhtml_IdxController extends Mage_Adminhtml_Controller_Acti
                     throw new Exception("Collection is not fine", 1);
                 }
             }
+
+            $productTable = Mage::getSingleton('core/resource')->getTableName('catalog_product_entity');
 
             foreach ($idxCollection as $idxRow) {
                 $sku = $idxRow->sku;
@@ -171,11 +175,22 @@ class Saksham_Idx_Adminhtml_IdxController extends Mage_Adminhtml_Controller_Acti
                     'sku' => $missingProduct->sku,
                     'has_options' => 0,
                     'required_options' => 0,
+                    'name' => $missingProduct->name,
+                    'price' => $missingProduct->price,
+                    'status' => $missingProduct->status,
+                    'visibility' => '4',
+                    'created_at' => now(),
                 ];
-                
+
+                $storeId = Mage_Core_Model_App::ADMIN_STORE_ID;
                 $product = Mage::getModel('catalog/product');
-                $product->setData($productData);
-                $product->save();
+                $product->setStoreId($storeId)
+                        ->setData($productData)
+                        ->setStockData(array(
+                                'is_in_stock' => 1,
+                                'qty' => $missingProduct->quantity),
+                            )
+                        ->save();
                 
                 $query = "UPDATE `import_product_idx` SET `product_id` = '{$product->entity_id}' WHERE `sku` = '{$product->sku}'";
                 Mage::getModel('idx/idx')->query($query);
