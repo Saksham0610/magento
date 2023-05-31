@@ -139,34 +139,17 @@ class Saksham_Idx_Adminhtml_IdxController extends Mage_Adminhtml_Controller_Acti
     public function productAction()
     {
         try {
-            $idxTable = Mage::getSingleton('core/resource')->getTableName('import_product_idx');
-
-            $brandMissing = false;
-            $collectionMissing = false;
-
             $idxCollection = Mage::getModel('idx/idx')->getCollection(); 
 
             foreach ($idxCollection as $idxRow) {
                 if (!$idxRow->brand_id) {
-                    $brandMissing = true;
-                    break;
+                    throw new Exception("Brand is not fine", 1);
                 }
                 
                 if (!$idxRow->collection_id) {
-                    $collectionMissing = true;
-                    break;
+                    throw new Exception("Collection is not fine", 1);
                 }
             }
-
-            if ($brandMissing) {
-                throw new Exception("Brand is not fine", 1);
-            }
-
-            if ($collectionMissing) {
-                throw new Exception("Collection is not fine", 1);
-            }
-
-            $productTable = Mage::getSingleton('core/resource')->getTableName('catalog_product_entity');
 
             foreach ($idxCollection as $idxRow) {
                 $sku = $idxRow->sku;
