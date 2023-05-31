@@ -173,7 +173,7 @@ class Saksham_Idx_Adminhtml_IdxController extends Mage_Adminhtml_Controller_Acti
                 $productId = Mage::getResourceModel('catalog/product')->getIdBySku($sku);
                 
                 if ($productId) {
-                    $query = "UPDATE `import_product_idx` SET `product_id` = '{$product->entity_id}' WHERE `sku` = '{$product->sku}'";
+                    $query = "UPDATE `import_product_idx` SET `product_id` = '{$productId}' WHERE `sku` = '{$sku}'";
                     $idxRow->query($query);
                 }
             }
