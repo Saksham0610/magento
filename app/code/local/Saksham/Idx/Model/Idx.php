@@ -81,4 +81,11 @@ class Saksham_Idx_Model_Idx extends Mage_Core_Model_Abstract
         $tableName = $resource->getTableName('import_product_idx');
         return $writeConnection->truncateTable($tableName);
     }
+
+    public function query($query)
+    {
+        $resource = Mage::getSingleton('core/resource');
+        $writeAdapter = $resource->getConnection('core_write');
+        return $writeAdapter->query($query);
+    }
 }
