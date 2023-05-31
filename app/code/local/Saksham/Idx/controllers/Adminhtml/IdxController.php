@@ -139,8 +139,6 @@ class Saksham_Idx_Adminhtml_IdxController extends Mage_Adminhtml_Controller_Acti
     public function productAction()
     {
         try {
-            $idxTable = Mage::getSingleton('core/resource')->getTableName('import_product_idx');
-
             $idxCollection = Mage::getModel('idx/idx')->getCollection(); 
 
             foreach ($idxCollection as $idxRow) {
@@ -152,8 +150,6 @@ class Saksham_Idx_Adminhtml_IdxController extends Mage_Adminhtml_Controller_Acti
                     throw new Exception("Collection is not fine", 1);
                 }
             }
-
-            $productTable = Mage::getSingleton('core/resource')->getTableName('catalog_product_entity');
 
             foreach ($idxCollection as $idxRow) {
                 $sku = $idxRow->sku;
