@@ -39,9 +39,9 @@ class Saksham_Idx_Model_Idx extends Mage_Core_Model_Abstract
         $modelCollection = $model->getCollection();
         $modelCollectionArray = $model->getCollection()->getData();
 
-        $modelBrandId = array_column($modelCollectionArray, $primaryKey);
+        $modelColumnId = array_column($modelCollectionArray, $primaryKey);
         $modelNames = array_column($modelCollectionArray,'name');
-        $modelNames = array_combine($modelBrandId,$modelNames);
+        $modelNames = array_combine($modelColumnId,$modelNames);
 
         $new = $this->updateTable($model, array_unique($idxModelNames));
 
@@ -56,5 +56,13 @@ class Saksham_Idx_Model_Idx extends Mage_Core_Model_Abstract
 	            $connection->query($query); 
             }
         }
+    }
+
+    public function insertOnDuplicate($data, $fields)
+    {
+        $resource = Mage::getSingleton('core/resource');
+        $connection = $resource->getConnection('core_write');
+        $table = $resource->getTableName('import_product_idx');
+        return $connection->insertOnDuplicate($table, $data, $fields);
     }
 }

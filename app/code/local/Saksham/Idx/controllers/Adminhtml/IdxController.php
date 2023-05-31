@@ -10,6 +10,54 @@ class Saksham_Idx_Adminhtml_IdxController extends Mage_Adminhtml_Controller_Acti
         $this->renderLayout();
     }
 
+    public function editAction() {
+        $id = $this->getRequest()->getParam('index');
+            $this->loadLayout();
+            $this->_setActiveMenu('idx/items');
+            $this->_addBreadcrumb(Mage::helper('adminhtml')->__('Item Manager'), Mage::helper('adminhtml')->__('Item Manager'));
+            $this->_addBreadcrumb(Mage::helper('adminhtml')->__('Item News'), Mage::helper('adminhtml')->__('Item News'));
+            $this->_addContent($this->getLayout()->createBlock(' idx/adminhtml_idx_edit'))
+                ->_addLeft($this->getLayout()
+                ->createBlock('idx/adminhtml_idx_edit_tabs'));
+            $this->renderLayout();
+    }
+
+    public function importAction()
+    {
+        $csvFile = $_FILES['import_options']['tmp_name'];
+        $csvData = file_get_contents($csvFile);
+        $csvData = array();
+
+        if (($handle = fopen($csvFile, 'r')) !== false) {
+            while (($data = fgetcsv($handle)) !== false) {
+                $row = array();
+                foreach ($data as $value) {
+                    $row[] = $value;
+                }
+                $csvData[] = $row;
+            }
+              fclose($handle);
+        }
+
+        $header = [];
+        $idxModel = Mage::getModel('idx/idx');
+        foreach ($csvData as $value)
+        {
+            if(!$header)
+            {
+                $header = $value;
+            }
+            else
+            {
+                $data = array_combine($header,$value);
+                $idxModel->insertOnDuplicate($data, array_keys($data));
+            }
+        }
+        
+        Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('idx')->__('Data Imported successfully.'));
+        $this->_redirect('*/adminhtml_idx/index'); 
+    }
+
     public function brandAction()
     {
         try {

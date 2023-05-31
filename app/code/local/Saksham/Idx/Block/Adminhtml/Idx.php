@@ -12,6 +12,12 @@ class Saksham_Idx_Block_Adminhtml_Idx extends Mage_Adminhtml_Block_Widget_Grid_C
 
     protected function _prepareLayout()
     {
+        $this->_addButton('import', array(
+            'label'   => Mage::helper('catalog')->__('Import Idx'),
+            'onclick' => "setLocation('{$this->getUrl('*/*/edit')}')",
+            'class'   => 'import'
+        ));
+
         $this->_addButton('brand', array(
             'label'   => Mage::helper('catalog')->__('Brand'),
             'onclick' => "setLocation('{$this->getUrl('*/*/brand')}')",
