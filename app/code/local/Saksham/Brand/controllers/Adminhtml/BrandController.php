@@ -42,22 +42,13 @@ class Saksham_Brand_Adminhtml_BrandController extends Mage_Adminhtml_Controller_
     public function saveAction()
     {
         try {
-            if (isset($_FILES['image']['name']) && $_FILES['image']['name'] != '') {
-            $uploader = new Varien_File_Uploader('image');
-            $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png']);
-            $uploader->setAllowRenameFiles(true);
-            $uploader->setFilesDispersion(false);
-
-            $path = Mage::getBaseDir('media') . DS . 'Brand';
-            $uploader->save($path);
-
-            $filePath = $path . DS . $uploader->getUploadedFileName();
-            }
-            
             $brandModel = Mage::getModel('brand/brand');
             $brandData = $this->getRequest()->getPost('brand');
             $brandModel->setData($brandData)
-                ->setId($this->getRequest()->getParam('id'));
+                ->setId($this->getRequest()->getParam('id'))
+                ->saveImage('image', Mage::getBaseDir('media') . DS . 'Brand')
+                ->saveImage('banner', Mage::getBaseDir('media') . DS . 'Brand' . DS . 'Banner');
+
 
             if ($brandModel->brand_id == NULL) {
                 $brandModel->created_at = date("y-m-d H:i:s");
@@ -65,8 +56,10 @@ class Saksham_Brand_Adminhtml_BrandController extends Mage_Adminhtml_Controller_
                 $brandModel->updated_at = date("y-m-d H:i:s");
             }
 
-            $brandModel->addData(['image'=> $_FILES['image']['name']])->save();
-
+            $brandModel->save();
+            if ($brandModel->brand_id) {
+                $brandModel->saveRewriteUrlKey();
+            }
 
             Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('brand')->__('Brand was successfully saved'));
             Mage::getSingleton('adminhtml/session')->setFormData(true);
