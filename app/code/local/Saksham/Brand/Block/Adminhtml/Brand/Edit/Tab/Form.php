@@ -7,13 +7,6 @@ class Saksham_Brand_Block_Adminhtml_Brand_Edit_Tab_Form extends Mage_Adminhtml_B
         $this->setForm($form);
         $fieldset = $form->addFieldset('brand_form',array('legend'=>Mage::helper('brand')->__('brand Information')));
         
-        $fieldset->addField('url_key', 'text', array(
-            'label' => Mage::helper('brand')->__('URL Key'),
-            'class' => 'required-entry',
-            'required' => true,
-            'name' => 'brand[url_key]',
-        ));
-
         $fieldset->addField('name', 'text', array(
             'label' => Mage::helper('brand')->__('Name'),
             'class' => 'required-entry',
@@ -40,6 +33,13 @@ class Saksham_Brand_Block_Adminhtml_Brand_Edit_Tab_Form extends Mage_Adminhtml_B
             'class' => 'required-entry',
             'required' => true,
             'name' => 'brand[description]',
+        ));
+
+        $fieldset->addField('sort_order', 'text', array(
+            'label' => Mage::helper('brand')->__('Sort Order'),
+            'class' => 'required-entry',
+            'required' => true,
+            'name' => 'brand[sort_order]',
         ));
 
         if ( Mage::getSingleton('adminhtml/session')->getbrandData() )

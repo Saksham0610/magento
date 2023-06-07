@@ -4,7 +4,25 @@
         <Saksham_Brand>
             <version>0.3.0</version>
         </Saksham_Brand>
-    </modules>    
+    </modules> 
+    <frontend>
+        <routers>
+            <brand>
+                <use>standard</use>
+                <args>
+                    <module>Saksham_Brand</module>
+                    <frontName>brand</frontName>
+                </args>
+            </brand>
+        </routers>
+        <layout>
+            <updates>
+                <brand module="Saksham_Brand">
+                    <file>brand.xml</file>
+                </brand>
+            </updates>
+        </layout>
+    </frontend>   
     <global>
         <resources>
             <brand_setup>

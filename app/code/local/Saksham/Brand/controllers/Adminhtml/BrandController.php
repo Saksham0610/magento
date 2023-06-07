@@ -47,7 +47,8 @@ class Saksham_Brand_Adminhtml_BrandController extends Mage_Adminhtml_Controller_
             $brandModel->setData($brandData)
                 ->setId($this->getRequest()->getParam('id'))
                 ->saveImage('image', Mage::getBaseDir('media') . DS . 'Brand')
-                ->saveImage('banner', Mage::getBaseDir('media') . DS . 'Brand' . DS . 'Banner');
+                ->saveImage('banner', Mage::getBaseDir('media') . DS . 'Brand' . DS . 'Banner')
+                ->addData(['url_key' => str_replace(' ', '-', $brandModel->name)]);
 
 
             if ($brandModel->brand_id == NULL) {
