@@ -2,10 +2,38 @@
 <config>
     <modules>
         <Saksham_Brand>
-            <version>0.2.0</version>
+            <version>0.3.0</version>
         </Saksham_Brand>
-    </modules>    
+    </modules> 
+    <frontend>
+        <routers>
+            <brand>
+                <use>standard</use>
+                <args>
+                    <module>Saksham_Brand</module>
+                    <frontName>brand</frontName>
+                </args>
+            </brand>
+        </routers>
+        <layout>
+            <updates>
+                <brand module="Saksham_Brand">
+                    <file>brand.xml</file>
+                </brand>
+            </updates>
+        </layout>
+    </frontend>   
     <global>
+        <events>
+            <brand_save_after>
+                <observers>
+                    <brand>
+                        <class>Saksham_Brand_Model_Observer</class>
+                        <method>generateBrandUrlRewrite</method>
+                    </brand>
+                </observers>
+            </brand_save_after>
+        </events>
         <resources>
             <brand_setup>
                 <setup>
