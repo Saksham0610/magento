@@ -1,47 +1,41 @@
 <style type="text/css">
-.container{
-  display: flex;
+.brand-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
-.card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  max-width: 300px;
-  margin: auto;
-  text-align: center;
-  font-family: arial;
+.brand-card {
+    width: 20%;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
 }
 
-.price {
-  color: grey;
-  font-size: 22px;
+.brand-link {
+    text-decoration: none;
+    color: #333;
 }
 
-.card button {
-  border: none;
-  outline: 0;
-  padding: 12px;
-  color: white;
-  background-color: #000;
-  text-align: center;
-  cursor: pointer;
-  width: 100%;
-  font-size: 18px;
+.brand-image {
+    width: 100%;
+    height: auto;
+    max-height: 200px;
 }
 
-.card button:hover {
-  opacity: 0.7;
+.brand-name {
+    margin-top: 10px;
 }
 </style>
-<div>
-    <div class="container">
-    <?php foreach ($this->getBrands() as $brand): ?>
-        <div class="homepage-banner card">
-            <p><a href="<?php echo $this->getBaseUrl().'media'.DS.'Brand'.DS.'Banner'.DS.$brand->banner; ?>">
-              <img src="<?php echo Mage::getBaseUrl('media') . DS. 'Brand' . DS . $brand->image; ?>" alt="<?php echo $brand->name; ?>" style="width:100%"/>
-            </a></p>
-            <h1><?php echo $brand->name; ?></h1>
-            <p><?php echo $brand->description; ?></p>
+
+<div class="brand-container">
+    <?php foreach ($this->getCollection() as $brand): ?>
+        <div class="brand-card">
+            <a class="brand-link" href="<?php echo $this->getBaseUrl() . $brand->url_key; ?>">
+                <img class="brand-image" src="<?php echo Mage::getBaseUrl('media') . 'Brand' . DS . $brand->image; ?>" alt="<?php echo $brand->name; ?>"/>
+            </a>
+            <h1 class="brand-name"><?php echo $brand->name; ?></h1>
         </div>
     <?php endforeach; ?>
-    </div>
 </div>

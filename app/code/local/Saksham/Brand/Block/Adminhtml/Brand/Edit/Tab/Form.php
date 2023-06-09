@@ -14,14 +14,14 @@ class Saksham_Brand_Block_Adminhtml_Brand_Edit_Tab_Form extends Mage_Adminhtml_B
             'name' => 'brand[name]',
         ));
 
-        $fieldset->addField('image', 'file', array(
+        $fieldset->addField('image', 'image', array(
             'label' => Mage::helper('brand')->__('Brand Image'),
             'class' => 'required-entry',
             'required' => true,
             'name' => 'image',
         ));
 
-        $fieldset->addField('banner', 'file', array(
+        $fieldset->addField('banner', 'image', array(
             'label' => Mage::helper('brand')->__('Brand Banner'),
             'class' => 'required-entry',
             'required' => true,

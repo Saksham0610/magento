@@ -24,6 +24,16 @@
         </layout>
     </frontend>   
     <global>
+        <events>
+            <brand_save_after>
+                <observers>
+                    <brand>
+                        <class>Saksham_Brand_Model_Observer</class>
+                        <method>generateBrandUrlRewrite</method>
+                    </brand>
+                </observers>
+            </brand_save_after>
+        </events>
         <resources>
             <brand_setup>
                 <setup>

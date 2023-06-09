@@ -48,20 +48,17 @@ class Saksham_Brand_Adminhtml_BrandController extends Mage_Adminhtml_Controller_
                 ->setId($this->getRequest()->getParam('id'))
                 ->saveImage('image', Mage::getBaseDir('media') . DS . 'Brand')
                 ->saveImage('banner', Mage::getBaseDir('media') . DS . 'Brand' . DS . 'Banner')
-                ->addData(['url_key' => str_replace(' ', '-', $brandModel->name)]);
-
+                ->addData(['url_key' => strtolower(str_replace(' ', '-', $brandModel->name))]);
 
             if ($brandModel->brand_id == NULL) {
                 $brandModel->created_at = date("y-m-d H:i:s");
+                Mage::dispatchEvent('brand_save_after', array('brand' => $brandModel));
             } else {
                 $brandModel->updated_at = date("y-m-d H:i:s");
             }
 
             $brandModel->save();
-            if ($brandModel->brand_id) {
-                $brandModel->saveRewriteUrlKey();
-            }
-
+            
             Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('brand')->__('Brand was successfully saved'));
             Mage::getSingleton('adminhtml/session')->setFormData(true);
 
