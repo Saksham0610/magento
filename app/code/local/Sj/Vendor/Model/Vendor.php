@@ -10,7 +10,7 @@ class Sj_Vendor_Model_Vendor extends Mage_Core_Model_Abstract
 	{
 		return [
 			'1' => 'Active',
-			'0' => 'Inactive'
+			'0' => 'Non Active'
 		]; 
 	}
 }

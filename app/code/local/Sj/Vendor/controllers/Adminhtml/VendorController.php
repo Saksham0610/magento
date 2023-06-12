@@ -62,7 +62,7 @@ class Sj_Vendor_Adminhtml_VendorController extends Mage_Adminhtml_Controller_Act
             }
 
             $addressModel->setData(array_merge($addressModel->getData(), $addressData))->addData(['vendor_id'=>$vendorModel->getId()])->save();
-            
+
             Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('vendor')->__('Vendor was successfully saved'));
             Mage::getSingleton('adminhtml/session')->setFormData(true);
 
