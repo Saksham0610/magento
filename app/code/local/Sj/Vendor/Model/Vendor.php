@@ -13,4 +13,10 @@ class Sj_Vendor_Model_Vendor extends Mage_Core_Model_Abstract
 			'0' => 'Non Active'
 		]; 
 	}
+
+	public function setPassword($password)
+    {
+        $this->setData('password', md5($password));
+        return $this;
+    }
 }
