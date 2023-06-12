@@ -6,18 +6,11 @@ class Sj_Vendor_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminhtml_Bloc
         $form = new Varien_Data_Form();
         $this->setForm($form);
         $fieldset = $form->addFieldset('vendor_form',array('legend'=>Mage::helper('vendor')->__('Vendor Information')));
-        $fieldset->addField('first_name', 'text', array(
-            'label' => Mage::helper('vendor')->__('First Name'),
+        $fieldset->addField('name', 'text', array(
+            'label' => Mage::helper('vendor')->__('Name'),
             'class' => 'required-entry',
             'required' => true,
-            'name' => 'vendor[first_name]',
-        ));
-
-        $fieldset->addField('last_name', 'text', array(
-            'label' => Mage::helper('vendor')->__('Last Name'),
-            'class' => 'required-entry',
-            'required' => true,
-            'name' => 'vendor[last_name]',
+            'name' => 'vendor[name]',
         ));
 
         $fieldset->addField('email', 'text', array(
@@ -27,15 +20,11 @@ class Sj_Vendor_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminhtml_Bloc
             'name' => 'vendor[email]',
         ));
 
-        $fieldset->addField('gender', 'select', array(
-            'label' => Mage::helper('vendor')->__('Gender'),
+        $fieldset->addField('password', 'password', array(
+            'label' => Mage::helper('vendor')->__('Password'),
             'class' => 'required-entry',
             'required' => true,
-            'name' => 'vendor[gender]',
-            'options' => array(
-                '1' => Mage::helper('vendor')->__('Male'),
-                '2' => Mage::helper('vendor')->__('Female'),
-            ),
+            'name' => 'vendor[password]',
         ));
 
         $fieldset->addField('mobile', 'text', array(
@@ -55,15 +44,6 @@ class Sj_Vendor_Block_Adminhtml_Vendor_Edit_Tab_Form extends Mage_Adminhtml_Bloc
                 '2' => Mage::helper('vendor')->__('Inactive'),
             ),
         ));
-
-        $fieldset->addField('company', 'text', array(
-            'label' => Mage::helper('vendor')->__('Company'),
-            'class' => 'required-entry',
-            'required' => true,
-            'name' => 'vendor[company]',
-        ));
-
-        
 
         if ( Mage::getSingleton('adminhtml/session')->getvendorData() )
         {

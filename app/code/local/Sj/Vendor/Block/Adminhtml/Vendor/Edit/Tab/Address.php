@@ -14,6 +14,13 @@ class Sj_Vendor_Block_Adminhtml_Vendor_Edit_Tab_Address extends Mage_Adminhtml_B
             'name' => 'address[address]',
         ));
 
+        $fieldset->addField('postal_code', 'text', array(
+            'label' => Mage::helper('vendor')->__('Postal Code'),
+            'class' => 'required-entry',
+            'required' => true,
+            'name' => 'address[postal_code]',
+        ));
+
         $fieldset->addField('city', 'text', array(
             'label' => Mage::helper('vendor')->__('City'),
             'class' => 'required-entry',
@@ -21,25 +28,27 @@ class Sj_Vendor_Block_Adminhtml_Vendor_Edit_Tab_Address extends Mage_Adminhtml_B
             'name' => 'address[city]',
         ));
 
-        $fieldset->addField('state', 'text', array(
+        $fieldset->addField('state', 'select', array(
             'label' => Mage::helper('vendor')->__('State'),
             'class' => 'required-entry',
             'required' => true,
             'name' => 'address[state]',
+            'values'    => Mage::getModel('directory/region')->getResourceCollection()
+                            ->addCountryFilter($countryId)
+                            ->load()
+                            ->toOptionArray()
         ));
 
-        $fieldset->addField('country', 'text', array(
+        $fieldset->addField('country', 'select', array(
             'label' => Mage::helper('vendor')->__('Country'),
             'class' => 'required-entry',
+            'values' => Mage::getModel('vendor/vendor')->getCountryOptions(),
             'required' => true,
             'name' => 'address[country]',
-        ));
-
-        $fieldset->addField('zip', 'text', array(
-            'label' => Mage::helper('vendor')->__('Zip'),
-            'class' => 'required-entry',
-            'required' => true,
-            'name' => 'address[zip]',
+            'values'    => Mage::getModel('directory/country')->getResourceCollection()
+                            ->loadByStore()
+                            ->toOptionArray(),
+            'onchange'  => 'updateStateOptions(this.value)',
         ));
 
         if ( Mage::getSingleton('adminhtml/session')->getvendorData() )

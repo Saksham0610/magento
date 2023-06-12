@@ -26,28 +26,16 @@ class Sj_Vendor_Block_Adminhtml_Vendor_Grid extends Mage_Adminhtml_Block_Widget_
             'index'     => 'vendor_id',
         ));
 
-        $this->addColumn('first_name', array(
-            'header'    => Mage::helper('vendor')->__('First Name'),
+        $this->addColumn('name', array(
+            'header'    => Mage::helper('vendor')->__('Name'),
             'align'     => 'left',
-            'index'     => 'first_name'
-        ));
-
-        $this->addColumn('last_name', array(
-            'header'    => Mage::helper('vendor')->__('Last Name'),
-            'align'     => 'left',
-            'index'     => 'last_name'
+            'index'     => 'name'
         ));
 
         $this->addColumn('email', array(
             'header'    => Mage::helper('vendor')->__('Email'),
             'align'     => 'left',
             'index'     => 'email'
-        ));
-
-        $this->addColumn('gender', array(
-            'header'    => Mage::helper('vendor')->__('Gender'),
-            'align'     => 'left',
-            'index'     => 'gender'
         ));
 
         $this->addColumn('mobile', array(
@@ -59,13 +47,12 @@ class Sj_Vendor_Block_Adminhtml_Vendor_Grid extends Mage_Adminhtml_Block_Widget_
         $this->addColumn('status', array(
             'header'    => Mage::helper('vendor')->__('Status'),
             'align'     => 'left',
-            'index'     => 'status'
-        ));
-
-        $this->addColumn('company', array(
-            'header'    => Mage::helper('vendor')->__('Company'),
-            'align'     => 'left',
-            'index'     => 'company'
+            'index'     => 'status',
+            'type'      => 'options',
+            'options'   => array(
+                '1' => $this->__('Active'),
+                '0' => $this->__('Not Active'),
+            ),
         ));
 
         $this->addColumn('created_at', array(
@@ -93,6 +80,23 @@ class Sj_Vendor_Block_Adminhtml_Vendor_Grid extends Mage_Adminhtml_Block_Widget_
         'url'  => $this->getUrl('*/*/massDelete', array('' => '')),
         'confirm' => Mage::helper('vendor')->__('Are you sure?')
         ));
+
+        $statuses = Mage::getSingleton('vendor/vendor')->getStatuses();
+        array_unshift($statuses, array('label' => '', 'value' => ''));
+        $this->getMassactionBlock()->addItem('status', array(
+            'label'      => $this->__('Change Status'),
+            'url'        => $this->getUrl('*/*/massStatus', array('_current'=>true)),
+            'additional' => array(
+                'visibility' => array(
+                    'name'   => 'status',
+                    'type'   => 'select',
+                    'class'  => 'required-entry',
+                    'label'  => $this->__('Status'),
+                    'values' => $statuses,
+                )
+            )
+        ));
+
          
         return $this;
     }

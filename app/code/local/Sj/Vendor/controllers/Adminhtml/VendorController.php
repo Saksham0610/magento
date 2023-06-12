@@ -47,7 +47,7 @@ class Sj_Vendor_Adminhtml_VendorController extends Mage_Adminhtml_Controller_Act
             $addressData = $this->getRequest()->getPost('address');
             $vendorModel->setData($vendorData)
                 ->setId($this->getRequest()->getParam('id'));
-
+            // echo "<pre>"; print_r($vendorModel); die();
             if ($vendorModel->vendor_id == NULL) {
                 $vendorModel->created_at = date("y-m-d H:i:s");
             } else {
@@ -62,7 +62,7 @@ class Sj_Vendor_Adminhtml_VendorController extends Mage_Adminhtml_Controller_Act
             }
 
             $addressModel->setData(array_merge($addressModel->getData(), $addressData))->addData(['vendor_id'=>$vendorModel->getId()])->save();
-            $vendorModel->addData(['address_id' => $addressModel->address_id])->save();
+            
             Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('vendor')->__('Vendor was successfully saved'));
             Mage::getSingleton('adminhtml/session')->setFormData(true);
 
@@ -84,7 +84,7 @@ class Sj_Vendor_Adminhtml_VendorController extends Mage_Adminhtml_Controller_Act
     public function massDeleteAction() {
         $vendorIds = $this->getRequest()->getParam('vendor_id');
         if(!is_array($vendorIds)) {
-            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('vendor/vendor')->__('Please select vendor(s).'));
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('vendor')->__('Please select vendor(s).'));
         } else {
             try {
                 $model = Mage::getModel('vendor/vendor');
@@ -93,7 +93,7 @@ class Sj_Vendor_Adminhtml_VendorController extends Mage_Adminhtml_Controller_Act
                 }
 
                 Mage::getSingleton('adminhtml/session')->addSuccess(
-                Mage::helper('vendor/vendor')->__(
+                Mage::helper('vendor')->__(
                     'Total of %d record(s) were deleted.', count($vendorIds)
                 )
                 );
@@ -102,6 +102,29 @@ class Sj_Vendor_Adminhtml_VendorController extends Mage_Adminhtml_Controller_Act
             }
         }
 
+        $this->_redirect('*/*/index');
+    }
+
+    public function massStatusAction() {
+        $vendorIds = $this->getRequest()->getParam('vendor_id');
+        $status = $this->getRequest()->getParam('status');
+        if ($status != 1) {
+            $status = 0;
+        }
+
+        if (!is_array($vendorIds)) {
+            $this->_getSession()->addError($this->__('Please select vendor(s).'));
+        } else {
+            try {
+                foreach ($vendorIds as $vendorId) {
+                    $vendor = Mage::getModel('vendor/vendor')->load($vendorId);
+                    $vendor->setStatus($status)->save();
+                }
+                $this->_getSession()->addSuccess($this->__('Total of %d vendor(s) have been updated.', count($vendorIds)));
+            } catch (Exception $e) {
+                $this->_getSession()->addError($e->getMessage());
+            }
+        }
         $this->_redirect('*/*/index');
     }
 }
