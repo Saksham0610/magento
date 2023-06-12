@@ -16,6 +16,10 @@ class Sj_Vendor_Model_Vendor extends Mage_Core_Model_Abstract
 
 	public function setPassword($password)
     {
+	    if($this->password == $password){
+	        return $this;
+	    }
+
         $this->setData('password', md5($password));
         return $this;
     }
