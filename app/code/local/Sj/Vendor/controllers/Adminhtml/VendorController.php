@@ -46,15 +46,16 @@ class Sj_Vendor_Adminhtml_VendorController extends Mage_Adminhtml_Controller_Act
             $vendorData = $this->getRequest()->getPost('vendor');
             $addressData = $this->getRequest()->getPost('address');
             $vendorModel->setData($vendorData)
-                ->setId($this->getRequest()->getParam('id'));
-            // echo "<pre>"; print_r($vendorModel); die();
+                        ->setPassword($vendorData['password'])
+                        ->setId($this->getRequest()->getParam('id'));
+
             if ($vendorModel->vendor_id == NULL) {
                 $vendorModel->created_at = date("y-m-d H:i:s");
             } else {
                 $vendorModel->updated_at = date("y-m-d H:i:s");
             }
 
-            $vendorModel->setPassword($vendorData['password'])->save();
+            $vendorModel->save();
             if (!($id = $this->getRequest()->getParam('id'))) {
                 $addressModel = Mage::getModel('vendor/vendor_address');
             } else {
