@@ -42,7 +42,7 @@
 </div>
 <div style="display:flex; margin-bottom: 3rem;">
     <?php foreach ($this->getCategorys() as $category) : ?>
-        <?php if($category->getId() != 2): ?>
+        <?php if($category->getProductCount() > 1): ?>
         <div class="card">
             <a href="<?php echo $this->getCategoryUrl($category); ?>">
                 <img src="<?php echo $category->getImageUrl(); ?>" alt="categories">

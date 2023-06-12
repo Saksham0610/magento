@@ -10,14 +10,14 @@
             <category>
                 <use>standard</use>
                 <args>
-                    <module>Saksham_Category</module>
+                    <module>Ccc_Category</module>
                     <frontName>category</frontName>
                 </args>
             </category>
         </routers>
         <layout>
             <updates>
-                <category module="Saksham_Category">
+                <category module="Ccc_Category">
                     <file>category.xml</file>
                 </category>
             </updates>
@@ -60,6 +60,11 @@
             </category_resource>
         </models>
         <blocks>
+            <adminhtml>
+                <rewrite>
+                    <catalog_category_tree>Ccc_Category_Block_Adminhtml_Catalog_Category_Tree</catalog_category_tree>
+                </rewrite>
+            </adminhtml>
             <category>
                 <class>Ccc_Category_Block</class>
             </category>
