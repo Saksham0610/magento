@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <brand translate="title" module="brand">
+            <title>Brands</title>
+            <sort_order>140</sort_order>
+            <children>
+                <manage translate="title" module="brand">
+                    <title>Manage Brands</title>
+                    <action>brand/adminhtml_brand/index</action>
+                    <sort_order>10</sort_order>
+                </manage>
+            </children>
+        </brand>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <brand translate="title" module="brand">
+                        <title>Brands</title>
+                        <sort_order>40</sort_order>
+                        <children>
+                            <managevender translate="title" module="brand">
+                                <title>Manage Brands</title>
+                                <action>brand/adminhtml_brand/index</action>
+                                <sort_order>10</sort_order>
+                            </managevender>
+                        </children>
+                    </brand>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <brand translate="title" module="brand">
+                                        <title>Brands Section</title>
+                                        <sort_order>50</sort_order>
+                                    </brand>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

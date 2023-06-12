@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <tabs>
+        <banner translate="label" module="banner">
+            <label>BANNER MANAGEMENT</label>
+            <sort_order>150</sort_order>
+        </banner>
+    </tabs>
+    <sections>
+        <banner translate="label" module="banner">
+            <label>Banner</label>
+            <tab>banner</tab>
+            <sort_order>1000</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+ 
+            <groups>
+                <banner_group translate="label" module="banner">
+                    <label>Frontend</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1000</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+ 
+                    <fields>
+                        <banner_select translate="label">
+                            <label>Home Page Banner Group Selection:</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>90</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <source_model>banner/source</source_model>
+                        </banner_select>
+                    </fields>
+                </banner_group>
+            </groups>
+        </banner>
+    </sections>
+</config>

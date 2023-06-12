@@ -2,10 +2,48 @@
 <config>
     <modules>
         <Ccc_Category>
-            <version>1.0.0</version>
+            <version>0.2.0</version>
         </Ccc_Category>
-    </modules>    
+    </modules>
+    <frontend>
+        <routers>
+            <category>
+                <use>standard</use>
+                <args>
+                    <module>Ccc_Category</module>
+                    <frontName>category</frontName>
+                </args>
+            </category>
+        </routers>
+        <layout>
+            <updates>
+                <category module="Ccc_Category">
+                    <file>category.xml</file>
+                </category>
+            </updates>
+        </layout>
+    </frontend>    
     <global>
+        <resources>
+            <category_setup>
+                <setup>
+                    <module>Ccc_Category</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </category_setup>
+            <category_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </category_write>
+            <category_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </category_read>
+        </resources>
         <models>
             <category>
                 <class>Ccc_Category_Model</class>
@@ -22,6 +60,11 @@
             </category_resource>
         </models>
         <blocks>
+            <adminhtml>
+                <rewrite>
+                    <catalog_category_tree>Ccc_Category_Block_Adminhtml_Catalog_Category_Tree</catalog_category_tree>
+                </rewrite>
+            </adminhtml>
             <category>
                 <class>Ccc_Category_Block</class>
             </category>
@@ -42,12 +85,5 @@
                 </args>
             </category>
         </routers>
-        <layout>
-            <updates>
-                <category>
-                    <file>category.xml</file>
-                </category>
-            </updates>
-        </layout>
     </admin>
 </config>
