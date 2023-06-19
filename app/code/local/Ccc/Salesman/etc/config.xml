@@ -42,12 +42,6 @@
                 <class>Ccc_Salesman_Model</class>
                 <resourceModel>salesman_resource</resourceModel>
             </salesman>
-            <catalog>
-                <rewrite>
-                    <!-- Model -->
-                    <product>Ccc_Salesman_Model_Product</product>
-                </rewrite>
-            </catalog>
             <salesman_resource>
                 <class>Ccc_Salesman_Model_Resource</class>
                 <deprecatedNode>salesman_mysql4</deprecatedNode>
