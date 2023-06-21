@@ -34,7 +34,7 @@ class Ccc_Practice_Block_Adminhtml_Ninth_Grid extends Mage_Adminhtml_Block_Widge
                 $resource = Mage::getResourceModel('catalog/product');
                 $value = $resource->getAttributeRawValue($productId, $attributeCode, Mage::app()->getStore());
 
-                if ($value === false || $value === null) {
+                if (empty($value)) {
                     $unassignedAttributes[] = array(
                         'product_id' => $productId,
                         'sku' => $sku,
@@ -44,6 +44,7 @@ class Ccc_Practice_Block_Adminhtml_Ninth_Grid extends Mage_Adminhtml_Block_Widge
                 }
             }
         }
+        
         $collection = new Varien_Data_Collection();
         foreach ($unassignedAttributes as $data) {
             $item = new Varien_Object($data);
