@@ -56,6 +56,7 @@ varienGrid.prototype = {
         if(this.preInitCallback){
             this.preInitCallback(this);
         }
+        console.log($(this.containerId+this.tableSufix));
         if($(this.containerId+this.tableSufix)){
             this.rows = $$('#'+this.containerId+this.tableSufix+' tbody tr');
             for (var row=0; row<this.rows.length; row++) {

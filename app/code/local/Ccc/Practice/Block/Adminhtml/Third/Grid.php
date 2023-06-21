@@ -1,5 +1,5 @@
 <?php
-class Ccc_Practice_Block_Adminhtml_First_Grid extends Mage_Adminhtml_Block_Widget_Grid
+class Ccc_Practice_Block_Adminhtml_Third_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
     public function __construct()
     {
@@ -11,12 +11,16 @@ class Ccc_Practice_Block_Adminhtml_First_Grid extends Mage_Adminhtml_Block_Widge
 
    protected function _prepareCollection()
     {
-        $collection = Mage::getModel('catalog/product')->getCollection()
-                        ->addAttributeToSelect('name')
-                        ->addAttributeToSelect('sku')
-                        ->addAttributeToSelect('cost')
-                        ->addAttributeToSelect('price')
-                        ->addAttributeToSelect('color');
+        $collection = Mage::getModel('eav/entity_attribute')->getCollection();
+        $collection->getSelect()
+            ->joinLeft(
+                array('option_count_table' => $collection->getTable('eav/attribute_option')),
+                'option_count_table.attribute_id = main_table.attribute_id',
+                array('option_count' => 'COUNT(option_count_table.option_id)')
+            )
+            ->group('main_table.attribute_id')
+            ->having('COUNT(option_count_table.option_id) > 1', 1);
+
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -25,34 +29,22 @@ class Ccc_Practice_Block_Adminhtml_First_Grid extends Mage_Adminhtml_Block_Widge
     {
         $baseUrl = $this->getUrl();
 
-        $this->addColumn('name', array(
-            'header'    => Mage::helper('product')->__('Name'),
+        $this->addColumn('attribute_id', array(
+            'header'    => Mage::helper('product')->__('Attribute Id'),
             'align'     => 'left',
-            'index'     => 'name'
+            'index'     => 'attribute_id'
         ));
 
-        $this->addColumn('sku', array(
-            'header'    => Mage::helper('product')->__('SKU'),
+        $this->addColumn('attribute_code', array(
+            'header'    => Mage::helper('product')->__('Attribute Code'),
             'align'     => 'left',
-            'index'     => 'sku'
+            'index'     => 'attribute_code'
         ));
 
-        $this->addColumn('cost', array(
-            'header'    => Mage::helper('product')->__('Cost'),
+        $this->addColumn('option_count', array(
+            'header'    => Mage::helper('product')->__('Option Count'),
             'align'     => 'left',
-            'index'     => 'cost'
-        ));
-
-        $this->addColumn('price', array(
-            'header'    => Mage::helper('product')->__('Price'),
-            'align'     => 'left',
-            'index'     => 'price'
-        ));
-
-        $this->addColumn('color', array(
-            'header'    => Mage::helper('product')->__('Color'),
-            'align'     => 'left',
-            'index'     => 'color'
+            'index'     => 'option_count'
         ));
 
         return parent::_prepareColumns();

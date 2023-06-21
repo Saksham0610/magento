@@ -1,5 +1,5 @@
 <?php
-class Ccc_Practice_Block_Adminhtml_First_Grid extends Mage_Adminhtml_Block_Widget_Grid
+class Ccc_Practice_Block_Adminhtml_Ninth_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
     public function __construct()
     {
@@ -11,12 +11,44 @@ class Ccc_Practice_Block_Adminhtml_First_Grid extends Mage_Adminhtml_Block_Widge
 
    protected function _prepareCollection()
     {
-        $collection = Mage::getModel('catalog/product')->getCollection()
-                        ->addAttributeToSelect('name')
-                        ->addAttributeToSelect('sku')
-                        ->addAttributeToSelect('cost')
-                        ->addAttributeToSelect('price')
-                        ->addAttributeToSelect('color');
+        $collection = Mage::getResourceModel('catalog/product_collection')
+            ->addAttributeToSelect('sku');
+        $attributes = Mage::getResourceModel('catalog/product_attribute_collection')
+            ->addFieldToFilter('is_user_defined', 1)
+            ->getItems();
+        foreach ($attributes as $attribute) {
+            $attributeCodes[] = $attribute->getAttributeCode();
+        }
+
+        $unassignedAttributes = array();
+        $products = Mage::getModel('catalog/product')->getCollection()
+            ->addAttributeToSelect('sku');
+        foreach ($products as $product) {
+            $productId = $product->getId();
+            $sku = $product->getSku();
+
+            foreach ($attributeCodes as $attributeCode) {
+                $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', $attributeCode);
+                $attributeId = $attribute->getId();
+
+                $resource = Mage::getResourceModel('catalog/product');
+                $value = $resource->getAttributeRawValue($productId, $attributeCode, Mage::app()->getStore());
+
+                if ($value === false || $value === null) {
+                    $unassignedAttributes[] = array(
+                        'product_id' => $productId,
+                        'sku' => $sku,
+                        'attribute_id' => $attributeId,
+                        'attribute_code' => $attributeCode
+                    );
+                }
+            }
+        }
+        $collection = new Varien_Data_Collection();
+        foreach ($unassignedAttributes as $data) {
+            $item = new Varien_Object($data);
+            $collection->addItem($item);
+        }
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -25,10 +57,10 @@ class Ccc_Practice_Block_Adminhtml_First_Grid extends Mage_Adminhtml_Block_Widge
     {
         $baseUrl = $this->getUrl();
 
-        $this->addColumn('name', array(
-            'header'    => Mage::helper('product')->__('Name'),
+        $this->addColumn('product_id', array(
+            'header'    => Mage::helper('product')->__('Product Id'),
             'align'     => 'left',
-            'index'     => 'name'
+            'index'     => 'product_id'
         ));
 
         $this->addColumn('sku', array(
@@ -37,22 +69,16 @@ class Ccc_Practice_Block_Adminhtml_First_Grid extends Mage_Adminhtml_Block_Widge
             'index'     => 'sku'
         ));
 
-        $this->addColumn('cost', array(
-            'header'    => Mage::helper('product')->__('Cost'),
+        $this->addColumn('attribute_id', array(
+            'header'    => Mage::helper('product')->__('Attribute Id'),
             'align'     => 'left',
-            'index'     => 'cost'
+            'index'     => 'attribute_id'
         ));
 
-        $this->addColumn('price', array(
-            'header'    => Mage::helper('product')->__('Price'),
+        $this->addColumn('attribute_code', array(
+            'header'    => Mage::helper('product')->__('Attribute Code'),
             'align'     => 'left',
-            'index'     => 'price'
-        ));
-
-        $this->addColumn('color', array(
-            'header'    => Mage::helper('product')->__('Color'),
-            'align'     => 'left',
-            'index'     => 'color'
+            'index'     => 'attribute_code'
         ));
 
         return parent::_prepareColumns();

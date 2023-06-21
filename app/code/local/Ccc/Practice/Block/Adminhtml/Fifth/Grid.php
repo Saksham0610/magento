@@ -1,5 +1,5 @@
 <?php
-class Ccc_Practice_Block_Adminhtml_First_Grid extends Mage_Adminhtml_Block_Widget_Grid
+class Ccc_Practice_Block_Adminhtml_Fifth_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
     public function __construct()
     {
@@ -11,12 +11,16 @@ class Ccc_Practice_Block_Adminhtml_First_Grid extends Mage_Adminhtml_Block_Widge
 
    protected function _prepareCollection()
     {
-        $collection = Mage::getModel('catalog/product')->getCollection()
-                        ->addAttributeToSelect('name')
-                        ->addAttributeToSelect('sku')
-                        ->addAttributeToSelect('cost')
-                        ->addAttributeToSelect('price')
-                        ->addAttributeToSelect('color');
+         $collection = Mage::getModel('catalog/product')->getCollection()
+            ->addAttributeToSelect('*');
+
+        $collection->getSelect()->joinLeft(
+            array('mg' => $collection->getTable('catalog/product_attribute_media_gallery')),
+            'mg.entity_id = e.entity_id',
+            array('media_count' => 'COUNT(mg.value_id)')
+        );
+
+        $collection->getSelect()->group('e.entity_id');
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -25,34 +29,16 @@ class Ccc_Practice_Block_Adminhtml_First_Grid extends Mage_Adminhtml_Block_Widge
     {
         $baseUrl = $this->getUrl();
 
-        $this->addColumn('name', array(
-            'header'    => Mage::helper('product')->__('Name'),
-            'align'     => 'left',
-            'index'     => 'name'
-        ));
-
         $this->addColumn('sku', array(
             'header'    => Mage::helper('product')->__('SKU'),
             'align'     => 'left',
             'index'     => 'sku'
         ));
 
-        $this->addColumn('cost', array(
-            'header'    => Mage::helper('product')->__('Cost'),
+        $this->addColumn('media_count', array(
+            'header'    => Mage::helper('product')->__('Media Count'),
             'align'     => 'left',
-            'index'     => 'cost'
-        ));
-
-        $this->addColumn('price', array(
-            'header'    => Mage::helper('product')->__('Price'),
-            'align'     => 'left',
-            'index'     => 'price'
-        ));
-
-        $this->addColumn('color', array(
-            'header'    => Mage::helper('product')->__('Color'),
-            'align'     => 'left',
-            'index'     => 'color'
+            'index'     => 'media_count'
         ));
 
         return parent::_prepareColumns();

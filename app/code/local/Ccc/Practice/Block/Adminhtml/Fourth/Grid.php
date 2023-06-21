@@ -1,22 +1,22 @@
 <?php
-class Ccc_Practice_Block_Adminhtml_First_Grid extends Mage_Adminhtml_Block_Widget_Grid
+class Ccc_Practice_Block_Adminhtml_Fourth_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
     public function __construct()
     {
         parent::__construct();
         $this->setId('practiceAdminhtmlPracticeGrid');
-        $this->setDefaultSort('name');
+        $this->setDefaultSort('sku');
         $this->setDefaultDir('ASC');
     }
 
    protected function _prepareCollection()
     {
         $collection = Mage::getModel('catalog/product')->getCollection()
-                        ->addAttributeToSelect('name')
-                        ->addAttributeToSelect('sku')
-                        ->addAttributeToSelect('cost')
-                        ->addAttributeToSelect('price')
-                        ->addAttributeToSelect('color');
+            ->addAttributeToSelect('entity_id')
+            ->addAttributeToSelect('sku')
+            ->addAttributeToSelect('image')
+            ->addAttributeToSelect('thumbnail')
+            ->addAttributeToSelect('small_image');
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -25,34 +25,34 @@ class Ccc_Practice_Block_Adminhtml_First_Grid extends Mage_Adminhtml_Block_Widge
     {
         $baseUrl = $this->getUrl();
 
-        $this->addColumn('name', array(
-            'header'    => Mage::helper('product')->__('Name'),
+        $this->addColumn('entity_id', array(
+            'header'    => Mage::helper('product')->__('Entity Id'),
             'align'     => 'left',
-            'index'     => 'name'
+            'index'     => 'entity_id'
         ));
 
         $this->addColumn('sku', array(
             'header'    => Mage::helper('product')->__('SKU'),
             'align'     => 'left',
-            'index'     => 'sku'
+            'index'     => 'sku',
         ));
 
-        $this->addColumn('cost', array(
-            'header'    => Mage::helper('product')->__('Cost'),
+        $this->addColumn('image', array(
+            'header'    => Mage::helper('product')->__('Image'),
             'align'     => 'left',
-            'index'     => 'cost'
+            'index'     => 'image'
         ));
 
-        $this->addColumn('price', array(
-            'header'    => Mage::helper('product')->__('Price'),
+        $this->addColumn('thumbnail', array(
+            'header'    => Mage::helper('product')->__('Thumbnail'),
             'align'     => 'left',
-            'index'     => 'price'
+            'index'     => 'thumbnail'
         ));
 
-        $this->addColumn('color', array(
-            'header'    => Mage::helper('product')->__('Color'),
+        $this->addColumn('small_image', array(
+            'header'    => Mage::helper('product')->__('Small Image'),
             'align'     => 'left',
-            'index'     => 'color'
+            'index'     => 'small_image'
         ));
 
         return parent::_prepareColumns();

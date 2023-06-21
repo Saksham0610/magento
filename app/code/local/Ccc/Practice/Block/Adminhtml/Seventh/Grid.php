@@ -1,5 +1,5 @@
 <?php
-class Ccc_Practice_Block_Adminhtml_First_Grid extends Mage_Adminhtml_Block_Widget_Grid
+class Ccc_Practice_Block_Adminhtml_Seventh_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
     public function __construct()
     {
@@ -11,12 +11,20 @@ class Ccc_Practice_Block_Adminhtml_First_Grid extends Mage_Adminhtml_Block_Widge
 
    protected function _prepareCollection()
     {
-        $collection = Mage::getModel('catalog/product')->getCollection()
-                        ->addAttributeToSelect('name')
-                        ->addAttributeToSelect('sku')
-                        ->addAttributeToSelect('cost')
-                        ->addAttributeToSelect('price')
-                        ->addAttributeToSelect('color');
+        $collection = Mage::getModel('customer/customer')->getCollection()
+            ->addAttributeToSelect('firstname');
+        $collection->getSelect()
+            ->joinLeft(
+                array('o' => Mage::getSingleton('core/resource')->getTableName('sales_flat_order')),
+                'e.entity_id = o.customer_id',
+                array('order_status_count' => 'COUNT(o.entity_id)')
+            )
+            ->joinLeft(
+                array('s' => Mage::getSingleton('core/resource')->getTableName('sales_order_status')),
+                'o.status = s.status',
+                array('order_status' => 's.label')
+            )
+            ->group('e.entity_id');
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -25,34 +33,34 @@ class Ccc_Practice_Block_Adminhtml_First_Grid extends Mage_Adminhtml_Block_Widge
     {
         $baseUrl = $this->getUrl();
 
-        $this->addColumn('name', array(
+        $this->addColumn('entity_id', array(
+            'header'    => Mage::helper('product')->__('Customer Id'),
+            'align'     => 'left',
+            'index'     => 'entity_id'
+        ));
+
+        $this->addColumn('firstname', array(
             'header'    => Mage::helper('product')->__('Name'),
             'align'     => 'left',
-            'index'     => 'name'
+            'index'     => 'firstname'
         ));
 
-        $this->addColumn('sku', array(
-            'header'    => Mage::helper('product')->__('SKU'),
+        $this->addColumn('email', array(
+            'header'    => Mage::helper('product')->__('Email'),
             'align'     => 'left',
-            'index'     => 'sku'
+            'index'     => 'email'
         ));
 
-        $this->addColumn('cost', array(
-            'header'    => Mage::helper('product')->__('Cost'),
+        $this->addColumn('order_status', array(
+            'header'    => Mage::helper('product')->__('Order Status'),
             'align'     => 'left',
-            'index'     => 'cost'
+            'index'     => 'order_status'
         ));
 
-        $this->addColumn('price', array(
-            'header'    => Mage::helper('product')->__('Price'),
+        $this->addColumn('order_status_count', array(
+            'header'    => Mage::helper('product')->__('Order Status Count'),
             'align'     => 'left',
-            'index'     => 'price'
-        ));
-
-        $this->addColumn('color', array(
-            'header'    => Mage::helper('product')->__('Color'),
-            'align'     => 'left',
-            'index'     => 'color'
+            'index'     => 'order_status_count'
         ));
 
         return parent::_prepareColumns();

@@ -1,11 +1,11 @@
 <?php
-class Ccc_Practice_Block_Adminhtml_First extends Mage_Adminhtml_Block_Widget_Grid_Container
+class Ccc_Practice_Block_Adminhtml_Fifth extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
     public function __construct()
     {
         $this->_blockGroup = 'practice';
-        $this->_controller = 'adminhtml_first';
-        $this->_headerText = Mage::helper('practice')->__('First Task');
+        $this->_controller = 'adminhtml_fifth';
+        $this->_headerText = Mage::helper('practice')->__('Fifth Task');
         parent::__construct();
         $this->_removeButton('add');
     }
@@ -16,7 +16,7 @@ class Ccc_Practice_Block_Adminhtml_First extends Mage_Adminhtml_Block_Widget_Gri
 
         $this->addButton('show_query', array(
             'label'   => Mage::helper('product')->__('Show Query'),
-            'onclick' => "setLocation('{$this->getUrl('practice/adminhtml_query/firstQuery')}')",
+            'onclick' => "setLocation('{$this->getUrl('practice/adminhtml_query/fifthQuery')}')",
             'class'   => 'show_query',
         ));
 

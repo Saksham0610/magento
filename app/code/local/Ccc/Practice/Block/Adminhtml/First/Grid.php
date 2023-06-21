@@ -17,6 +17,7 @@ class Ccc_Practice_Block_Adminhtml_First_Grid extends Mage_Adminhtml_Block_Widge
                         ->addAttributeToSelect('cost')
                         ->addAttributeToSelect('price')
                         ->addAttributeToSelect('color');
+
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }

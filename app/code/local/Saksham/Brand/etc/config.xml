@@ -81,12 +81,6 @@
                     <brand>
                         <table>brand</table>
                     </brand>
-                    <brand_address>
-                        <table>brand_address</table>
-                    </brand_address>
-                    <brand_price>
-                        <table>brand_price</table>
-                    </brand_price>
                 </entities>
             </brand_resource>
         </models>
