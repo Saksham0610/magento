@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <practice translate="title" module="practice">
+            <title>Practice</title>
+            <sort_order>130</sort_order>
+            <children>
+                <test translate="title" module="practice">
+                    <title>Test</title>
+                    <action>practice/adminhtml_query/test</action>
+                    <sort_order>10</sort_order>
+                </test>
+                <first translate="title" module="practice">
+                    <title>First</title>
+                    <action>practice/adminhtml_query/first</action>
+                    <sort_order>10</sort_order>
+                </first>
+                <second translate="title" module="practice">
+                    <title>Second</title>
+                    <action>practice/adminhtml_query/second</action>
+                    <sort_order>10</sort_order>
+                </second>
+                <third translate="title" module="practice">
+                    <title>Third</title>
+                    <action>practice/adminhtml_query/third</action>
+                    <sort_order>10</sort_order>
+                </third>
+                <fourth translate="title" module="practice">
+                    <title>Fourth</title>
+                    <action>practice/adminhtml_query/fourth</action>
+                    <sort_order>10</sort_order>
+                </fourth>
+                <fifth translate="title" module="practice">
+                    <title>Fifth</title>
+                    <action>practice/adminhtml_query/fifth</action>
+                    <sort_order>10</sort_order>
+                </fifth>
+                <sixth translate="title" module="practice">
+                    <title>Sixth</title>
+                    <action>practice/adminhtml_query/sixth</action>
+                    <sort_order>10</sort_order>
+                </sixth>
+                <seventh translate="title" module="practice">
+                    <title>Seventh</title>
+                    <action>practice/adminhtml_query/seventh</action>
+                    <sort_order>10</sort_order>
+                </seventh>
+                <eight translate="title" module="practice">
+                    <title>Eight</title>
+                    <action>practice/adminhtml_query/eight</action>
+                    <sort_order>10</sort_order>
+                </eight>
+                <ninth translate="title" module="practice">
+                    <title>Ninth</title>
+                    <action>practice/adminhtml_query/ninth</action>
+                    <sort_order>10</sort_order>
+                </ninth>
+                <tenth translate="title" module="practice">
+                    <title>Tenth</title>
+                    <action>practice/adminhtml_query/tenth</action>
+                    <sort_order>10</sort_order>
+                </tenth>
+            </children>
+        </practice>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <practice translate="title" module="practice">
+                        <title>Practices</title>
+                        <sort_order>40</sort_order>
+                        <children>
+                            <test translate="title" module="practice">
+                                <title>Test</title>
+                                <action>practice/adminhtml_query/test</action>
+                                <sort_order>10</sort_order>
+                            </test>
+                            <first translate="title" module="practice">
+                                <title>First</title>
+                                <action>practice/adminhtml_query/first</action>
+                                <sort_order>10</sort_order>
+                            </first>
+                            <second translate="title" module="practice">
+                                <title>Second</title>
+                                <action>practice/adminhtml_query/second</action>
+                                <sort_order>10</sort_order>
+                            </second>
+                            <third translate="title" module="practice">
+                                <title>Third</title>
+                                <action>practice/adminhtml_query/third</action>
+                                <sort_order>10</sort_order>
+                            </third>
+                            <fourth translate="title" module="practice">
+                                <title>Fourth</title>
+                                <action>practice/adminhtml_query/fourth</action>
+                                <sort_order>10</sort_order>
+                            </fourth>
+                            <fifth translate="title" module="practice">
+                                <title>Fifth</title>
+                                <action>practice/adminhtml_query/fifth</action>
+                                <sort_order>10</sort_order>
+                            </fifth>
+                            <sixth translate="title" module="practice">
+                                <title>Sixth</title>
+                                <action>practice/adminhtml_query/sixth</action>
+                                <sort_order>10</sort_order>
+                            </sixth>
+                            <seventh translate="title" module="practice">
+                                <title>Seventh</title>
+                                <action>practice/adminhtml_query/seventh</action>
+                                <sort_order>10</sort_order>
+                            </seventh>
+                            <eight translate="title" module="practice">
+                                <title>Eight</title>
+                                <action>practice/adminhtml_query/eight</action>
+                                <sort_order>10</sort_order>
+                            </eight>
+                            <ninth translate="title" module="practice">
+                                <title>Ninth</title>
+                                <action>practice/adminhtml_query/ninth</action>
+                                <sort_order>10</sort_order>
+                            </ninth>
+                            <tenth translate="title" module="practice">
+                                <title>Tenth</title>
+                                <action>practice/adminhtml_query/tenth</action>
+                                <sort_order>10</sort_order>
+                            </tenth>
+                        </children>
+                    </practice>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <practice translate="title" module="practice">
+                                        <title>Practices Section</title>
+                                        <sort_order>50</sort_order>
+                                    </practice>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>
